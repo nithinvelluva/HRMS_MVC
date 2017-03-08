@@ -1,0 +1,398 @@
+﻿@model HrmsMvc.Models.EmployeeModel
+@{
+    ViewBag.Title = "Leaves";
+    SelectList leaveTypeList = @ViewBag.LeaveTypes;
+    SelectList leaveDurList = @ViewBag.LeaveDurTypes;
+}
+
+<html>
+<head>
+    <title>Leaves</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h3 class="title">Apply Leave</h3>
+        </div>
+        <div id="LoadPage" class="waitIconDiv col-lg-12 col-md-12 col-xs-12 col-sm-12 text-center">
+            <img alt="Progress" src="~/Content/Images/wait_icon.gif" width="50" height="50" id="imgProg" />
+        </div>
+        <div class="content lvApplyContent">
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("Leave Type", new { @class = "control-label labelClass hrms-required-field" })
+                </div>
+                <div class="col-md-8 col-lg-5">
+                    @Html.DropDownList("LeaveTypeDropDown", leaveTypeList, "Select Leave Type", new { @class = "form-control input-field" })
+                    @Html.Label("Please Select Leave Type !!", new { id = "ErrLvType", @class = "text-danger errLabel" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("Leave Balance", new { @class = "control-label labelClass" })
+                </div>
+                <div class="col-md-8 col-lg-8">
+                    @Html.Label("", "0.0", new { @class = "control-label labelClass", @id = "leaveBalLabel" })
+                    <img alt="Progress" src="~/Content/images/wait_icon.gif" style="height:30px;width:30px;display:none"
+                         id="LvStatiImgProg" />
+                    <i class="fa fa-info-circle fa-2x cursor" aria-hidden="true" data-toggle="modal" data-target="#LeaveStatiDiv"
+                       title="View Leave Details"
+                       onclick="GetLeaveStatistics(true,null)"></i>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("From Date  ", new { @class = "control-label labelClass hrms-required-field" })
+                </div>
+                <div class="col-md-8 col-lg-5">
+                    <input type="text" class="form-control inputbox from-date-picker input-field" placeholder="Select From Date" id="Fromdatetimepicker" required>
+                    @Html.Label("Please Select From Date !!", new { id = "Errsdate", @class = "text-danger errLabel" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("To Date    ", new { @class = "control-label  labelClass hrms-required-field" })
+                </div>
+                <div class="col-md-8 col-lg-5">
+                    <input type="text" class="form-control inputbox to-date-picker1 input-field" placeholder="Select To Date" id="Todatetimepicker" required>
+                    @Html.Label("Please Select Todate !!", new { id = "Errenddate", @class = "text-danger errLabel" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("Duration", new { @class = "control-label labelClass hrms-required-field" })
+                </div>
+                <div class="col-md-8 col-lg-5">
+                    @Html.DropDownList("LeaveDurationDropDown", leaveDurList, "Select Leave Duration", new { @class = "form-control input-field" })
+                    @Html.Label("Please Select Leave Duration !!", new { id = "ErrLvDur", @class = "text-danger errLabel" })
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-3 col-lg-3">
+                    @Html.Label("Notes  ", new { @class = "control-label labelClass" })
+                </div>
+                <div class="col-md-8 col-lg-5">
+                    <textarea class="form-control" id="notes" placeholder="" maxlength="3992" style="height:100px"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12 col-lg-12 cursor">
+                    <input type="button" class="btn btn-info btn-fill pull-right" value="Apply" id="applyBtn" onclick="ApplyLeave()" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade col-xs-12 col-md-12 col-lg-12 col-sm-12" id="LeaveStatiDiv" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" style="height:auto">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title text-center">Leave Details</h3>
+                </div>
+
+                <div class="modal-body" style="min-height:150px">
+                    <div class="row" id="statiDiv">
+                        <div id="LoadPage1" class="text-center col-lg-12 col-md-12 col-xs-12 col-sm-12 text-center">
+                            <img alt="Progress" src="~/Content/Images/wait_icon.gif" width="40" height="40" id="imgProg1" />
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                            @Html.Label("", " ", new { @class = "control-label", @id = "leaveStatLabel" })
+                        </div>
+                        <table id="LvStatiTable" class="gridTableAtt cell-border hover display responsive" cellspacing="0" style="width:90%">
+                            <thead class="tableHeader">
+                                <tr>
+                                    <th>Leave Type</th>
+                                    <th>Entitled</th>
+                                    <th>Taken</th>
+                                    <th>Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    var LeaveStatiTable = $('#LvStatiTable').DataTable({ "pageLength": 5, "bFilter": false,
+        "bInfo": false,"bPaginate": false, "bLengthChange": false, "ordering": false,
+        "searching": false,responsive: true });
+    $('#LvStatiImgProg').hide();
+    var response = "";
+    var LeaveDurList = @Html.Raw(Json.Encode(ViewBag.LeaveDurTypes));
+    function showLoad() {
+        $("#imgProg1").show();
+        $("#LvStatiTable").addClass("disablediv");
+    }
+    function HideLoad() {
+        $("#imgProg1").hide();
+        $("#LvStatiTable").removeClass("disablediv");
+    }
+    function ResetValues()
+    {
+        $('#leaveBalLabel').text("0.0");
+        $('#LeaveTypeDropDown').val('');
+        $('#LvStatiImgProg').hide();
+        $('#Fromdatetimepicker').val('');
+        $('#Todatetimepicker').val('');
+        $('#LeaveDurationDropDown').empty();
+        var OptHtml = '<option value="' + 0 + '">' + "Select Leave Duration" + '</option>';
+        $('#LeaveDurationDropDown').append(OptHtml);
+        $('#notes').val('');
+        $('.waitIconDiv').hide();
+    }
+    function GetLeaveStatistics(view,leaveType) {
+        showLoad();
+        var currentDate = new Date();
+        var date = currentDate.toDateString();
+        $('#leaveStatLabel').text("Showing leave status as of : " + date);
+
+        var leaveStatistics = {};
+        leaveStatistics.url = "/User/GetLeaveStatistics";
+        leaveStatistics.type = "POST";
+        leaveStatistics.data = JSON.stringify({ EmpId: empId });
+        leaveStatistics.datatype = "json";
+        leaveStatistics.contentType = "application/json";
+        leaveStatistics.success = function (status) {
+            $('#LvStatiImgProg').hide();
+            HideLoad();
+            response = JSON.parse(status);
+            if(view)
+            {
+                LeaveStatiTable.clear().draw();
+                LeaveStatiTable.row.add({
+                    0: "Casual",
+                    1: 30,
+                    2: 30 - response[0].CasualLeave,
+                    3: response[0].CasualLeave
+                }).draw();
+                LeaveStatiTable.row.add({
+                    0: "Festive",
+                    1: 9,
+                    2: 9 - response[0].FestiveLeave,
+                    3: response[0].FestiveLeave
+                }).draw();
+                LeaveStatiTable.row.add({
+                    0: "Sick",
+                    1: 14,
+                    2: 14 - response[0].SickLeave,
+                    3: response[0].SickLeave
+                }).draw();
+            }
+            else{
+                switch (leaveType)
+                {
+                    case "Casual":
+                        $('#leaveBalLabel').text(response[0].CasualLeave);
+                        break;
+                    case "Festive":
+                        $('#leaveBalLabel').text(response[0].FestiveLeave);
+                        break;
+                    case "Sick":
+                        $('#leaveBalLabel').text(response[0].SickLeave);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        };
+        leaveStatistics.error = function () {
+        };
+        $.ajax(leaveStatistics);
+    }
+    function ApplyLeave(){
+        clearErrors();
+        var LvType = $('#LeaveTypeDropDown').val();
+        var FromDate = $('#Fromdatetimepicker').val();
+        var ToDate = $('#Todatetimepicker').val();
+        var LvDur = $('#LeaveDurationDropDown').val();
+        var Notes = $('#notes').val();
+        var flag = false;
+        if(LvType <= 0)
+        {
+            $('#LeaveTypeDropDown').css('border-color', 'red');
+            $('#ErrLvType').show();
+            flag = true;
+        }
+        if(LvDur <= 0)
+        {
+            $('#LeaveDurationDropDown').css('border-color', 'red');
+            $('#ErrLvDur').show();
+            flag = true;
+        }
+        if (stringIsNull(FromDate)) {
+            $('#Fromdatetimepicker').css('border-color', 'red');
+            $('#Errsdate').show();
+            flag = true;
+        }
+        if (stringIsNull(ToDate)) {
+            $('#Todatetimepicker').css('border-color', 'red');
+            $('#Errenddate').show();
+            flag = true;
+        }
+        if(!flag)
+        {
+            showLoadreport("#imgProg",".lvApplyContent");
+            var StrLvTyp = $('#LeaveTypeDropDown option:selected').text();
+            var LvDurStr = $('#LeaveDurationDropDown option:selected').text();
+            var AddLeave = {};
+            AddLeave.url = "/User/AddLeave";
+            AddLeave.type = "POST";
+            AddLeave.data = JSON.stringify({leaveId:null, EmpId: empId,fromDate:FromDate,toDate:ToDate,leaveType:LvType,leaveDurType:LvDur,comments:Notes,LvTypStr:StrLvTyp,usertype:userType,lvDurTypStr:LvDurStr,isCancel:false });
+            AddLeave.datatype = "json";
+            AddLeave.contentType = "application/json";
+            AddLeave.success = function (status) {
+                HideLoadreport("#imgProg",".lvApplyContent");
+                var response = status;
+                if(stringIsNull(response)){}
+                else if(response == "OK"){
+                    ResetValues();
+                    clearErrors();
+                    showMessageBox(SUCCESS, "Saved Successfully");
+                }
+                else if(response == "EXISTS"){
+                    showMessageBox(WARNING, "An Entry Exists In Selected Date Range !!");
+                }
+                else if(response == "ERROR"){
+                    showMessageBox(ERROR, "An Unexpected Error Occured!!");
+                }
+                else if(response == "1"){
+                    $('#ErrLvType').show();
+                    $('#LeaveTypeDropDown').css('border-color', 'red');
+                }
+                else if(response == "2"){
+                    $('#Errsdate').show();
+                    $('#Fromdatetimepicker').css('border-color', 'red');
+                }
+                else if(response == "3"){
+                    $('#Errenddate').text("Please Select Todate !!");
+                    $('#Errenddate').show();
+                    $('#Todatetimepicker').css('border-color', 'red');
+                }
+                else if(response == "4"){
+                    $('#Errenddate').text("Todate must be greater than equal to Fromdate !!");
+                    $('#Errenddate').show();
+                    $('#Todatetimepicker').css('border-color', 'red');
+                }
+                else if(response == "5"){
+                    $('#ErrLvDur').show();
+                    $('#LeaveDurationDropDown').css('border-color', 'red');
+                }
+                else if(response == "6"){
+                    showMessageBox(WARNING, "Only 9 Festive leaves can be availed per year !!");
+                }
+                else if(response == "7"){
+                    showMessageBox(WARNING, "Not Enough Leaves !!");
+                }
+            };
+            AddLeave.error = function () {
+                HideLoadreport("#imgProg",".lvApplyContent");
+            };
+            $.ajax(AddLeave);
+        }
+    }
+    /*Handling Validation Errors..*/
+    $('#LeaveTypeDropDown').on('change',function(){
+        var value = $('#LeaveTypeDropDown').val();
+
+        if(value > 0)
+        {
+            $('#ErrLvType').hide();
+            $('#LeaveTypeDropDown').css('border-color', '');
+            $('#LvStatiImgProg').show();
+            $('#leaveBalLabel').text('0.0');
+            var LeaveTypeStr = $('#LeaveTypeDropDown option:selected').text().trim();
+            var flag = true;
+            if(LeaveTypeStr == "Festive")
+            {
+                flag = false;
+            }
+            GetLeaveStatistics(false,LeaveTypeStr);
+
+            try
+            {
+                $('#LeaveDurationDropDown').empty();
+                var OptHtml = '<option value="' + 0 + '">' + "Select Leave Duration" + '</option>';
+                $('#LeaveDurationDropDown').append(OptHtml);
+
+                if(flag)
+                {
+                    $.each(LeaveDurList, function(i, option) {
+                        $('#LeaveDurationDropDown').append($('<option/>').attr("value",option.Value).text(option.Text));
+                    });
+                }
+                else{
+                    $.each(LeaveDurList, function(i, option) {
+
+                        if(option.Value == 1)
+                        {
+                            $('#LeaveDurationDropDown').append($('<option/>').attr("value",option.Value).text(option.Text));
+                        }
+                    });
+                }
+            }
+            catch(ex)
+            {
+            }
+        }
+        else{
+            $('#ErrLvType').show();
+            $('#LeaveTypeDropDown').css('border-color', 'red');
+            $('#leaveBalLabel').text("0.0");
+            $('#LvStatiImgProg').hide();
+        }
+    });
+    $('#LeaveDurationDropDown').on('change',function(){
+        if(stringIsNull($('#LeaveDurationDropDown').val())
+            || $('#LeaveDurationDropDown').val() < 0)
+        {
+            $('#LeaveDurationDropDown').css('border-color', 'red');
+            $('#ErrLvDur').show();
+        }
+        else
+        {
+            $('#LeaveDurationDropDown').css('border-color', '');
+            $('#ErrLvDur').hide();
+        }
+    });
+    $('#Fromdatetimepicker').on('change blur keyup paste', function() {
+        if(this.value.toString().length < 0)
+        {
+            $('#Fromdatetimepicker').css('border-color', 'red');
+            $('#Errsdate').show();
+        }
+        else
+        {
+            $('#Fromdatetimepicker').css('border-color', '');
+            $('#Errsdate').hide();
+        }
+    });
+    $('#Todatetimepicker').on('change blur keyup paste', function() {
+        if(this.value.toString().length < 0)
+        {
+            $('#Todatetimepicker').css('border-color', 'red');
+            $('#Errenddate').text("Please Select Todate !!");
+            $('#Errenddate').show();
+        }
+        else
+        {
+            $('#Todatetimepicker').css('border-color', '');
+            $('#Errenddate').hide();
+        }
+    });
+</script>

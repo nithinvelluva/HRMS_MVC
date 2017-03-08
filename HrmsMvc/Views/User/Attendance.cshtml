@@ -1,0 +1,356 @@
+﻿<html>
+<head>
+    <title>Attendance</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="card">
+        <div class="waitIconDiv row text-center" style="display:none">
+            <img alt="Progress" src="~/Content/images/wait_icon.gif" width="50" height="50" id="imgProgAtt" />
+        </div>
+        <div class="header">
+            <h3 class="title">Attendance</h3>
+        </div>
+        <div class="content attnCntDiv">
+            <div class="row" id="punchdInDiv">
+                <div class="col-md-4">
+                    <h5>Punched In Time</h5>
+                </div>
+                <div class="col-md-8">
+                    <h5 id="PunchedInTime" class="disp_label"></h5>
+                </div>
+            </div>
+            <div class="row" id="punchdOutDiv">
+                <div class="col-md-4">
+                    <h5>Punched Out Time</h5>
+                </div>
+                <div class="col-md-8">
+                    <h5 id="PunchedOutTime" class="disp_label"></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Date</h5>
+                </div>
+                <div class="col-md-8">
+                    <h5 id="currentDate" class="disp_label"></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Time</h5>
+                </div>
+                <div class="col-md-8">
+                    <h5 id="currentTime" class="disp_label"></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <h5>Notes</h5>
+                </div>
+                <div class="col-md-6">
+                    <textarea id="notesField" class="form-control" placeholder="Enter Notes" style="height:100px"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="row text-right">
+                <div class="col-md-12 col-lg-12">
+                    <input type="button" onclick="punchIn()" class="btn btn-info btn-fill pull-right" value="Punch In" id="punhInBtn" />
+                    <input type="button" onclick="punchOut()" class="btn btn-info btn-fill pull-right" value="Punch Out" id="punhOutBtn" style="display:none" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="header">
+            <h4 class="title">Attendance Reports</h4>
+        </div>
+        <div class="content">
+            <input type="button" class="btn btn-info btn-fill" value="Search attendance" onclick="checkpunchInfo()"
+                   data-toggle="modal" data-target="#CheckPuchInfo" />
+        </div>
+    </div>
+
+    <div class="modal fade col-xs-12 col-md-12 col-lg-12 col-sm-12" id="CheckPuchInfo" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content hrms-modal-height">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title text-center">Attendance Report</h3>
+                </div>
+
+                <div class="modal-body" style="min-height:150px">
+                    <div class="row attnRprtDiv">
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label class="hrms-required-field">Start Date</label>
+                                <input type="text" class="form-control input-field" id="PunchStartDate" title="Start Date" placeholder="Start Date" required />
+                                @Html.Label("Select Start Date", new { id = "lblstartDate", @class = "text-danger errLabel" })
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="form-group">
+                                <label>End Date</label>
+                                <input type="text" class="form-control input-field" id="PunchEndDate" title="End Date" placeholder="End Date" required />
+                                @Html.Label("Select End Date", new { id = "lblEndDate", @class = "text-danger errLabel" })
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 pull-right" style="padding-top:20px">
+                            <div class="form-group">
+                                <label></label>
+                                <input type="button" value="Search" class="btn btn-info btn-fill" onclick="SearchAttendance()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div id="LoadPageAttnRprt" class="waitIconDiv row text-center" style="display:none">
+                        <img alt="Progress" src="~/Content/images/wait_icon.gif" width="50" height="50" id="imgProg" />
+                    </div>
+                    <br />
+                    @Html.Label("No Records Found!!", new { id = "lblNoResults", @class = "text-danger errLabel" })
+                    <div class="row" id="ResultTableDiv">
+                        <table id="punchTable" class="gridTableAtt cell-border hover display nowrap responsive" cellspacing="0" style="width:90%">
+                            <thead class="pretty col-header">
+                                <tr class="tableHeader">
+                                    <th>Date</th>
+                                    <th>PunchedIn Time</th>
+                                    <th>PunchedOut Time</th>
+                                    <th>Duration(hh:mm)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    var PunchDetailsTable;
+    //PunchDetailsTable = $('#punchTable').DataTable({
+    //    "pageLength": 7, "bFilter": true, "bInfo": true,
+    //    "bLengthChange": false, "ordering": true,
+    //    "searching": false, responsive: true
+    //});
+    $('#lblNoResults').show();
+    $('#ResultTableDiv').hide();
+    $("#LoadPage").hide();
+    function checkpunchInfo() {
+        clearValues();
+        clearErrors();
+    }
+    function clearValues() {
+        $('#PunchStartDate').val("");
+        $('#PunchEndDate').val("");        
+        $('#ResultTableDiv').hide();
+        $('#notesField').val('');
+    }
+    function punchIn() {
+        showLoadreport("#imgProgAtt", ".attnCntDiv");
+        var AddAttendance = {};
+        AddAttendance.url = "/User/AddAttendance";
+        AddAttendance.type = "POST";
+        AddAttendance.data = JSON.stringify({ EmpId: empId, punchInTime: null, punchOutTime: null, type: 1, timeoffset: offset });
+        AddAttendance.datatype = "json";
+        AddAttendance.contentType = "application/json";
+        AddAttendance.success = function (status) {
+            setCurrentDateTime();
+            $('#notesField').val('');
+            var response = JSON.parse(status);
+            HideLoadreport("#imgProgAtt", ".attnCntDiv");
+            if (stringIsNull(response)) {
+                showMessageBox(ERROR, "An Unexpected Error Occured!!");
+            }
+            if (response["ErrorString"].length == 0) {
+                $('#punhInBtn').hide();
+                $('#punhOutBtn').show();
+                $('#PunchedInTime').text(response["PunchinTime"]);
+                $('#punchdInDiv').show();
+                $('#punchdOutDiv').hide();
+            }
+            else if (response["ErrorString"].length > 0) {
+                showMessageBox(ERROR, "An Unexpected Error Occured!!");
+            }
+        };
+        AddAttendance.error = function () {
+            HideLoadreport("#imgProgAtt", ".attnCntDiv");
+            showMessageBox(ERROR, "An Unexpected Error Occured!!");
+        };
+        $.ajax(AddAttendance);
+    }
+    function punchOut() {
+        showLoadreport("#imgProgAtt", ".attnCntDiv");
+        var pin = $('#PunchedInTime').text();
+        var AddAttendance = {};
+        AddAttendance.url = "/User/AddAttendance";
+        AddAttendance.type = "POST";
+        AddAttendance.data = JSON.stringify({ EmpId: empId, punchInTime: pin, punchOutTime: null, type: 2, timeoffset: offset });
+        AddAttendance.datatype = "json";
+        AddAttendance.contentType = "application/json";
+        AddAttendance.success = function (status) {
+            setCurrentDateTime();
+            $('#notesField').val('');
+            var response = JSON.parse(status);
+            HideLoadreport("#imgProgAtt", ".attnCntDiv");
+            if (stringIsNull(response)) {
+                showMessageBox(ERROR, "An Unexpected Error Occured!!");
+            }
+            if (response["ErrorString"].length == 0) {
+                $('#punhInBtn').show();
+                $('#punhOutBtn').hide();
+                $('#PunchedInTime').text(response["PunchinTime"]);
+                $('#PunchedOutTime').text(response["PunchoutTime"]);
+                $('#punchdInDiv').hide();
+                $('#punchdOutDiv').hide();
+            }
+            else if (response["ErrorString"].length > 0) {
+                showMessageBox(ERROR, "An Unexpected Error Occured!!");
+            }
+        };
+        AddAttendance.error = function () {
+            HideLoadreport("#imgProgAtt", ".attnCntDiv");
+            showMessageBox(ERROR, "An Unexpected Error Occured!!");
+        };
+        $.ajax(AddAttendance);
+    }
+    $('#PunchStartDate').on('change keyup paste', function () {
+        if (this.value.toString().length == 0) {
+            $('#PunchStartDate').css('border-color', 'red');
+            $('#lblstartDate').text('Select Start Date !')
+            $('#lblstartDate').show();
+        }
+        else {
+            $('#PunchStartDate').css('border-color', '');
+            $('#lblstartDate').hide();
+        }
+    });
+    $('#PunchEndDate').on('change keyup paste', function () {
+        if (this.value.toString().length == 0) {
+        }
+        else {
+            $('#PunchEndDate').css('border-color', '');
+            $('#lblstartDate').hide();
+        }
+    });
+    function getAttendanceData() {
+        if (PunchDetailsTable != undefined) {
+            PunchDetailsTable.destroy();
+        }
+        $('#lblNoResults').hide();
+        $('#ResultTableDiv').show();
+        HideLoadreport("#LoadPageAttnRprt", "#attnRprtDiv");
+
+        PunchDetailsTable = $('#punchTable').DataTable({
+            "pageLength": 7, "processing": true, "serverSide": true,
+            "paging": true, "bLengthChange": false, "searching": false,
+            "bInfo": true,
+            "ajax": {
+                "url": "/User/SearchPunchDetails",
+                "type": "POST",
+                "dataType": "JSON",
+                "data": function (d) {                    
+                    d.EmpId = empId;
+                    d.StartDate = $('#PunchStartDate').val();
+                    d.EndDate = $('#PunchEndDate').val();
+                    d.timeoffset = offset;                   
+                }
+            }
+            ,"columnDefs": [
+                {
+                    "render": function ( data, type, row ) {                            
+                        return row["PunchinTime"].split(' ')[0]
+                    },
+                    "targets": 0
+                }                
+            ]
+            , "columns": [
+                { "data": "PunchinTime" },
+                { "data": "PunchinTime" },
+                { "data": "PunchoutTime" },
+                { "data": "Duration" }
+            ]
+             , "language":
+                {
+                    "processing": "<div class='row text-center waitIconDiv'><img alt='Progress' src='../Content/images/wait_icon.gif' width='50' height='50'/></div>"
+                }
+        });
+        //var SearchPunchDetails = {};
+        //SearchPunchDetails.url = "/User/SearchPunchDetails";
+        //SearchPunchDetails.type = "POST";
+        //SearchPunchDetails.data = JSON.stringify({ EmpId: empId, StartDate: $('#PunchStartDate').val(), EndDate: $('#PunchEndDate').val(), timeoffset: offset, blockNumber: currBlockNumber });
+        //SearchPunchDetails.datatype = "json";
+        //SearchPunchDetails.contentType = "application/json";
+        //SearchPunchDetails.success = function (status) {
+        //    blockNumber = blockNumber + 1;
+        //    console.log("after response" + blockNumber);
+        //    HideLoadreport("#LoadPageAttnRprt", "#attnRprtDiv");
+        //    try {
+        //        if (!stringIsNull(status) && status.length > 0) {
+        //            var response = JSON.parse(status);
+        //            NoMoreData = response[0].NoMoreData;
+        //            $('#ResultTableDiv').show();
+        //            PunchDetailsTable.clear().draw();
+        //            for (var i = 0; i <= response.length - 1 ; i++) {
+        //                PunchDetailsTable.row.add({
+        //                    0: (response[i].PunchinTime).split(' ')[0],
+        //                    1: response[i].PunchinTime,
+        //                    2: response[i].PunchoutTime,
+        //                    3: response[i].Duration
+        //                }).draw();
+        //            }
+        //        }
+        //        else {
+        //            $('#ResultTableDiv').hide();
+        //            $('#lblNoResults').show();
+        //        }
+        //    }
+        //    catch (ex) {
+        //        showMessageBox(ERROR, "An Unexpected Error Occured!!");
+        //    }
+        //};
+        //SearchPunchDetails.error = function () {
+        //    HideLoadreport("#LoadPageAttnRprt", "#attnRprtDiv");
+        //    showMessageBox(ERROR, "An Unexpected Error Occured!!");
+        //};
+        //$.ajax(SearchPunchDetails);
+    }    
+    function SearchAttendance() {        
+        clearErrors();
+        var startDate = $('#PunchStartDate').val();
+        var endDate = $('#PunchEndDate').val();
+        var sDate = new Date(startDate);
+        var eDate = new Date(endDate);
+        var currentDate = new Date();
+        var flag = false;
+        if ((startDate.length == 0 && endDate.length == 0) || (startDate.length == 0 && endDate.length != 0)) {
+            $('#PunchStartDate').css('border-color', 'red');
+            $('#lblstartDate').text('Select Start date !!');
+            $('#lblstartDate').show();
+            flag = true;
+        }
+        else if (sDate > eDate) {
+            $('#PunchStartDate').css('border-color', 'red');
+            $('#lblstartDate').text('Start date must be less than or equal to End date !!');
+            $('#lblstartDate').show();
+            flag = true;
+        }
+        else if (eDate > currentDate) {
+            $('#PunchEndDate').css('border-color', 'red');
+            $('#lblEndDate').text('End date must be less than or equal to Current Date !!');
+            $('#lblEndDate').show();
+            flag = true;
+        }
+        if (!flag) {
+            showLoadreport("#LoadPageAttnRprt", "#attnRprtDiv");
+            blockNumber = 1;
+            getAttendanceData();
+        }
+    }  
+</script>

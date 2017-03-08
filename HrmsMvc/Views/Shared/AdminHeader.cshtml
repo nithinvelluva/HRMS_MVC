@@ -1,0 +1,16 @@
+﻿<link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<script src="~/Scripts/modernizr-2.8.3.js"></script>
+
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+
+    
+    @Html.ActionLink("Manage Employees", "AdminPage", "Admin", new { area = "" }, new { @class = "navbar-brand", @id = "linkMngEmp" })
+    @Html.ActionLink("Attendance", "Attendance", "Admin", new { area = "" }, new { @class = "navbar-brand", @id = "linkMngAtten" })
+    @Html.ActionLink("Leave Info", "LeaveInfo", "Admin", new { area = "" }, new { @class = "navbar-brand", @id = "linkMngLv" })
+    
+</div>

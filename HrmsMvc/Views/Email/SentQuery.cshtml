@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "SentQuery";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form id="sentQueryform" method="post" action="../User/SentQuery">
+        <div class="row">
+            <div class="col-lg-4">
+                <h5>From</h5>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" id="senterEmail" class="form-control" readonly />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <h5>Subject</h5>
+            </div>
+            <div class="col-lg-8">
+                <input type="text" class="form-control" id="Emailsubject" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <h5>Message</h5>
+            </div>
+            <div class="col-lg-8">
+                <textarea id="EmailBody" class="form-control txt_area"></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <div class="col-lg-12 col-xs-12 col-md-12 col-sm-12 text-center">
+                <i class="fa fa-paper-plane fa-2x cursor" aria-hidden="true" id="sentQuery" onclick="SentQuery()" title="Sent"></i>
+            </div>
+        </div>
+    </form>
+</body>
+</html>
+
+<script>
+    //var empEmail = @Html.Raw(Json.Encode(ViewBag.EmpEmail));
+    //$('#senterEmail').val(empEmail);
+    $('#senterEmail').val("nithinvelluva@gmail.com");   
+    $('#Emailsubject').val('');
+    $('#EmailBody').val('');
+    function SentQuery() {
+        showLoadreport("#LoadPageLvQuery", "#contactAdminDiv");
+        //var fromEmail = empEmail;
+        var fromEmail = "nithinvelluva@gmail.com";
+        var emailSubject = $('#Emailsubject').val();
+        var emailBody = $('#EmailBody').val();
+        var SentQueryToAdmin = {};
+        SentQueryToAdmin.url = "/User/SentQuery";
+        SentQueryToAdmin.type = "POST";
+        SentQueryToAdmin.data = JSON.stringify({ SenterMail: fromEmail, emailSubject: emailSubject, emailBody: emailBody });
+        SentQueryToAdmin.datatype = "json";
+        SentQueryToAdmin.contentType = "application/json";
+
+        SentQueryToAdmin.success = function (status) {
+            HideLoadreport("#LoadPageLvQuery", "#contactAdminDiv");
+            if (status == "OK") {
+                $('#Emailsubject').val('');
+                $('#EmailBody').val('');
+                $('#SentLeaveQueryModal').modal('toggle');
+                showMessageBox(SUCCESS, "Query Sent Successfully." + "\n" + "We will get back to you soon..");
+            }
+            else {
+                showMessageBox(ERROR, status);
+            }
+        };
+
+        SentQueryToAdmin.error = function () {
+            HideLoadreport("#LoadPageLvQuery", "#contactAdminDiv");
+            showMessageBox(ERROR, "An UnExpected Error Occured !!");
+        };
+
+        $.ajax(SentQueryToAdmin);
+    }
+</script>

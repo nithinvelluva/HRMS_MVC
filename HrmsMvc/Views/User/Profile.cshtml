@@ -1,0 +1,389 @@
+﻿@model HrmsMvc.Models.EmployeeModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h4 class="title" id="profileTitle">Profile</h4>
+        </div>
+        <div class="row text-center waitIconDiv" id="LoadProfDiv">
+            <img alt="Progress" src="~/Content/images/wait_icon.gif" width="50" height="50" id="imgProgProf" />
+        </div>
+        <div class="content">            
+            <form id="EmpProfileForm" method="post">
+                @Html.Hidden("SelGender")
+                @Html.Hidden("SelRole")
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Employee ID</label>
+                            @Html.EditorFor(model => model.EmpID, new { htmlAttributes = new { @class = "form-control input-field-readOnly", @id = "EmpId" } })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Username</label>
+                            @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control input-field-profile", @id = "UserName", placeholder = "Username" } })
+                            @Html.Label("Enter username !!", new { id = "lblusername", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Designation</label>
+                            @Html.EditorFor(model => model.Designation, new { htmlAttributes = new { @class = "form-control input-field-readOnly", @id = "EmpDesig", placeholder = "Designation" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="hrms-required-field">First Name</label>                            
+                            @Html.Editor(" ", new { htmlAttributes = new { @class = "form-control input-field-profile", @id = "EmpFirstName", placeholder = "First Name" } })
+                            @Html.Label("Enter first name", new { id = "lblempFirstname", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Last Name</label>                           
+                            @Html.Editor(" ", new { htmlAttributes = new { @class = "form-control input-field-profile", @id = "EmpLastName", placeholder = "Last Name" } })
+                            @Html.Label("Enter last name", new { id = "lblempLastname", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Date Of Birth</label>
+                            @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control input-field-profile", @id = "EmpDateOfBirth", placeholder = "Date Of Birth" })
+                            @Html.Label("Select Date Of Birth", new { id = "ErrlblDateOfBirth", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Gender</label>
+                            @Html.Editor(" ", new { htmlAttributes = new { @class = "form-control input-field-profile-readOnly", @id = "EmpGender", placeholder = "Gender" } })                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Phone Number</label>
+                            @Html.EditorFor(model => model.PhoneNumber, new { htmlAttributes = new { @class = "form-control input-field-profile", @id = "PhoneNumber", placeholder = "Phone Number" } })
+                            @Html.Label("Enter Phone Number !!", new { id = "lblphonenumber", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="hrms-required-field">Email ID</label>
+                            @Html.EditorFor(model => model.EmailId, new { htmlAttributes = new { @class = "form-control input-field-profile", @id = "EmailId", placeholder = "Email Id" } })
+                            @Html.Label("Enter Email Id !!", new { id = "lblEmailId", @class = "text-danger errLabel" })
+                        </div>
+                    </div>
+                </div>
+                <input type="button" class="btn btn-info btn-fill pull-right" value="Edit Profile" id="editBtn" />
+                <input type="button" class="btn btn-info btn-fill pull-right" value="Update Profile" style="display:none" id="updateBtn" />
+                <div class="clearfix"></div>
+
+                <div class="modal fade col-lg-12 col-xs-12 col-md-12 col-sm-12" id="UserProfileSubmitModel" role="dialog">
+                    <div class="modal-dialog">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h3 class="modal-title text-center">HRMS</h3>
+                            </div>
+
+                            <div class="modal-body profSubmitDiv">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
+                                            @Html.Label("", "Please enter password to confirm", htmlAttributes: new { @class = "labelclass h5", @id = "LabelEmpPasswordSepCnfrm" })
+                                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control input-field", @id = "userPassword", placeholder = "Password", @type = "password" } })
+                                            @Html.Label("Enter Password !!", new { id = "lblpasswordSepCnfrm", @class = "text-danger errLabel" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="LoadPageProf" class="waitIconDiv row text-center" style="display:none">
+                                    <img alt="Progress" src="~/Content/images/wait_icon.gif" width="50" height="50" id="imgProg" />
+                                </div>
+                            </div>
+                            <div class="modal-footer text-center">
+                                <input type="button" value="Submit" class="btn btn-info btn-fill" id="userFormSubmitBtn" />                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+    function DisableFields() {
+        $('#EmpId').attr('disabled', 'disabled');
+        $('#EmpDesig').attr('disabled', 'disabled');
+        $('#EmpGender').attr('disabled', 'disabled');
+        $('.input-field-profile').attr('disabled', 'disabled');
+    }
+    function EnableFields() {
+        $('.input-field-profile').removeAttr('disabled');
+    }
+    $('#userPassword').on('change keyup paste blur', function () {
+        if (this.value.toString().length < 1) {
+            $('#userPassword').css('border-color', 'red');
+            $('#lblpasswordSepCnfrm').text("Enter Password !!");
+            $('#lblpasswordSepCnfrm').show();
+        }
+        else {
+            $('#userPassword').css('border-color', '');
+            $('#lblpasswordSepCnfrm').hide();
+        }
+    });
+    $('#EmpDateOfBirth').datepicker('setDate', new Date($('#EmpDateOfBirth').val()));
+    $('#editBtn').click(function () {
+        $('#editBtn').hide();
+        $('#updateBtn').show();
+        EnableFields();
+    })    
+    $('#userFormSubmitBtn').click(function () {
+        var empId = $('#EmpId').val();
+        var userName = $('#UserName').val();
+        var fisrtName = $('#EmpFirstName').val();
+        var lastName = $('#EmpLastName').val();
+        var empName = fisrtName + " " + lastName;
+        var dob = $('#EmpDateOfBirth').val();
+        var pwd = $('#Password').val();
+        var cnfrmPwd = $('#userPassword').val();
+        var email = $('#EmailId').val();
+        var phone = $('#PhoneNumber').val();
+        var gender = $('#SelGender').val();
+        var role = $('#SelRole').val();
+
+        showLoadreport("#LoadPageProf", "#profSubmitDiv");
+
+        var patDetails = {};
+        patDetails.url = "/User/ProfileDetails";
+        patDetails.type = "POST";
+        patDetails.data = JSON.stringify({ Id: empId, firstName: fisrtName, lastName: lastName, empname: empName, dob: dob, gender: gender, role: role, username: userName, cnfPwd: cnfrmPwd, email: email, phone: phone });
+        patDetails.datatype = "json";
+        patDetails.contentType = "application/json";
+        patDetails.success = function (status) {
+            HideLoadreport("#LoadPageProf", "#profSubmitDiv");
+            if (!stringIsNull(status)) {            
+                var response = (JSON.parse(status));
+
+                if (stringIsNull(response.ErrorString)) {
+                    clearErrors();
+                    $('#updateBtn').hide();
+                    $('#editBtn').show();
+                    DisableFields();
+                    $('#lblpasswordSepCnfrm').hide();
+                    $('#userPassword').val('');
+                    $('#UserProfileSubmitModel').modal('toggle');
+                    showMessageBox(SUCCESS, "Profile Updated Successfully.");
+                }
+                else {
+                    try {
+                        var errlst = response.ErrorString.split(":");
+                        var errcnt = errlst.length;
+                        for (var i = 0; i < errcnt - 1; i++) {
+                            if (errlst[i] == 1) {
+                                $('#UserProfileSubmitModel').modal('toggle');
+                                $('#lblempFirstname').show();
+                                $('#EmpFirstName').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == 2) {
+                                $('#UserProfileSubmitModel').modal('toggle');
+                                $('#lblempLastname').show();
+                                $('#EmpLastName').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == 3) {
+                                $('#UserProfileSubmitModel').modal('toggle');
+                                $('#lblgender').show();
+                            }
+                            else if (errlst[i] == 4) {
+                                $('#UserProfileSubmitModel').modal('toggle');
+                                $('#ErrlblDateOfBirth').show();
+                                $('#EmpDateOfBirth').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == 5) {
+                                $('#UserProfileSubmitModel').modal('toggle');
+                                $('#lblusername').show();
+                                $('#UserName').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == 7) {
+                                $('#lblpasswordSepCnfrm').text('Enter Password !!')
+                                $('#lblpasswordSepCnfrm').show();
+                                $('#userPassword').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "PM") {
+                                $('#lblpasswordSepCnfrm').text('Password Mismatch !!')
+                                $('#lblpasswordSepCnfrm').show();
+                                $('#userPassword').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == 9) {
+                                $('#ErrlblDateOfBirth').text('Age must be greater than 18 !!')
+                                $('#ErrlblDateOfBirth').show();
+                                $('#EmpDateOfBirth').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "EN") {
+                                $('#lblEmailId').text("Enter Email Id !!");
+                                $('#lblEmailId').show();
+                                $('#EmailId').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "ENV") {
+                                $('#lblEmailId').text("Enter Valid Email Id !!");
+                                $('#lblEmailId').show();
+                                $('#EmailId').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "PN") {
+                                $('#lblphonenumber').text("Enter PhoneNumber !!");
+                                $('#lblphonenumber').show();
+                                $('#PhoneNumber').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "PNV") {
+                                $('#lblphonenumber').text("Enter Valid PhoneNumber !!");
+                                $('#lblphonenumber').show();
+                                $('#PhoneNumber').css('border-color', 'red');
+                            }
+                            else if (errlst[i] == "ERROR") {
+                                showMessageBox(ERROR, "An unexpected error occured !!");
+                            }
+                        }
+                    }
+                    catch (ex) {
+                    }
+                }
+            }
+        };
+        patDetails.error = function () {
+            HideLoadreport("#LoadPageProf", "#profSubmitDiv");
+            showMessageBox(ERROR, "An unexpected error occured !!");
+        };
+        $.ajax(patDetails);
+    })
+    $('#updateBtn').click(function () {       
+        var empId = $('#EmpId').val();
+        var fisrtName = $('#EmpFirstName').val();
+        var lastName = $('#EmpLastName').val();
+        var empName = fisrtName + " " + lastName;
+        var dob = $('#EmpDateOfBirth').val();
+        var userName = $('#UserName').val();
+        var email = $('#EmailId').val();
+        var phone = $('#PhoneNumber').val();
+        var gender = $('#SelGender').val();
+        var role = $('#SelRole').val();
+       
+        var validFlag = false;
+
+        if (stringIsNull(fisrtName)) {
+            $('#lblempFirstname').show();
+            $('#EmpFirstName').css('border-color', 'red');
+            validFlag = true;
+        }
+        if (stringIsNull(lastName)) {
+            $('#lblempLastname').show();
+            $('#EmpLastName').css('border-color', 'red');
+            validFlag = true;
+        }
+        if (stringIsNull(dob)) {
+            $('#EmpDateOfBirth').css('border-color', 'red');
+            $('#ErrlblDateOfBirth').text("Select Date Of Birth");
+            $('#ErrlblDateOfBirth').show();
+            validFlag = true;
+        }
+        if (stringIsNull(userName)) {
+            $('#UserName').css('border-color', 'red');
+            $('#lblusername').show();
+            validFlag = true;
+        }
+        if (stringIsNull(email)) {
+            $('#EmailId').css('border-color', 'red');
+            $('#lblEmailId').text("Enter Email Id !!");
+            $('#lblEmailId').show();
+            validFlag = true;
+        }
+        if (stringIsNull(phone)) {
+            $('#PhoneNumber').css('border-color', 'red');
+            $('#lblphonenumber').show();
+            validFlag = true;
+        }
+        if (!validFlag) {
+            clearErrors();
+            $('#userPassword').val('');
+            $('#UserProfileSubmitModel').modal('show');
+        }
+    })    
+    $('#UserName').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#UserName').css('border-color', 'red');
+            $('#lblusername').show();
+        }
+        else {
+            $('#UserName').css('border-color', '');
+            $('#lblusername').hide();
+        }
+    });
+    $('#EmpFirstName').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#EmpFirstName').css('border-color', 'red');
+            $('#lblempFirstname').show();
+        }
+        else {
+            $('#EmpFirstName').css('border-color', '');
+            $('#lblempFirstname').hide();
+        }
+    });
+    $('#EmpLastName').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#EmpLastName').css('border-color', 'red');
+            $('#lblempLastname').show();
+        }
+        else {
+            $('#EmpLastName').css('border-color', '');
+            $('#lblempLastname').hide();
+        }
+    });
+    $('#EmpDateOfBirth').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#EmpDateOfBirth').css('border-color', 'red');
+            $('#ErrlblDateOfBirth').text("Select Date Of Birth");
+            $('#ErrlblDateOfBirth').show();
+        }
+        else {
+            $('#EmpDateOfBirth').css('border-color', '');
+            $('#ErrlblDateOfBirth').hide();
+        }
+    });
+    $('#EmailId').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#EmailId').css('border-color', 'red');
+            $('#lblEmailId').text("Enter Email Id !!");
+            $('#lblEmailId').show();
+        }
+        else {
+            $('#EmailId').css('border-color', '');
+            $('#lblEmailId').hide();
+        }
+    });
+    $('#PhoneNumber').on('blur', function () {
+        if (this.value.toString().length == 0) {
+            $('#PhoneNumber').css('border-color', 'red');
+            $('#lblphonenumber').text("Enter Phone Number !!");
+            $('#lblphonenumber').show();
+        }
+        else {
+            $('#PhoneNumber').css('border-color', '');
+            $('#lblphonenumber').hide();
+        }
+    });
+</script>

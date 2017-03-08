@@ -1,0 +1,946 @@
+﻿@model HrmsMvc.Models.EmployeeModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>HRMS - Profile</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/x-icon" href="../Content/Images/icon-crm.ico">
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Dashboard/User/UserDetails.css" rel="stylesheet" />
+    <link href="~/Content/Dashboard/User/Imageoverlay.css" rel="stylesheet" />
+    <link href="~/Content/Dashboard/User/EmployeeReportsStyle.css" rel="stylesheet" />
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" />
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="@Url.Content("~/Content/Dashboard/light-bootstrap-dashboard.css")" rel="stylesheet" type="text/css" />
+    <!--     Fonts and icons     -->
+    <link href="@Url.Content("~/Content/Dashboard/font-awesome.min.css")" rel="stylesheet" type="stylesheet" />
+    <link href="@Url.Content("~/Content/Roboto-font.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Dashboard/pe-icon-7-stroke.css")" rel="stylesheet" type="text/css" />
+
+    <link href="~/Content/lobibox.css" rel="stylesheet" />
+    <link href="~/Content/jquery.dataTables.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/responsive.dataTables.min.css" rel="stylesheet" />
+
+    <!--   Core JS Files   -->
+    <script src="~/Scripts/jquery-3.1.1.js"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/moment.js"></script>
+    @*<script src="~/Scripts/bootstrap-datepicker.min.js"></script>*@
+    @*<link href="~/Content/datepicker3.min.css" rel="stylesheet" />*@
+    <script src="~/Scripts/jquery-ui-1.11.4.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/jquery.dataTables.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/dataTables.responsive.min.js"></script>
+    <script src="~/Scripts/lobibox.js"></script>
+    <script src="~/Scripts/Helpers/Common.js"></script>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+    <script src="~/Scripts/Dashboard/constants.js" type="text/javascript"></script>
+    <script src="~/Scripts/Dashboard/light-bootstrap-dashboard.js" type="text/javascript"></script>
+    <script src="~/Scripts/Helpers/html2canvas.js"></script>
+    <script src="~/Scripts/Helpers/jspdf.debug.js"></script>
+    @*<script src="~/Scripts/Helpers/canvas2image.js"></script>*@
+    <script>
+        var offset = (new Date()).getTimezoneOffset();
+        var empId = @Html.Raw(Json.Encode(ViewBag.EmpId));
+        var userType = @Html.Raw(Json.Encode(ViewBag.UserType));
+        var UserGender= @Html.Raw(Json.Encode(ViewBag.Gender));
+        var userPhoto = @Html.Raw(Json.Encode(ViewBag.UserPhotoPath));
+        var LeaveTypList = @Html.Raw(Json.Encode(ViewBag.LeaveTypes));
+    </script>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="sidebar" data-color="purple">
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="javascript:void(0)" class="simple-text" onclick="navigateTo(PROFILE)">
+                        HRMS - PROFILE
+                    </a>
+                </div>
+                <ul class="main-nav nav">
+                    <li class="active" id="userProfileRef" onclick="navigateTo(PROFILE)">
+                        <a href="javascript:void(0)">
+                            <i class="pe-7s-user"></i>
+                            <p>Profile</p>
+                        </a>
+                    </li>
+                    <li id="attendanceRef" onclick="navigateTo(ATTENDANCE)">
+                        <a href="javascript:void(0)">
+                            <i class="pe-7s-note"></i>
+                            <p>Attendance</p>
+                        </a>
+                    </li>
+
+                    <li id="leavesRef" onclick="leaveRefClick()" class="cursor">
+                        <a href="#leaveItemsDiv" data-toggle="collapse">
+                            <i class="pe-7s-note2"></i>
+                            <p>
+                                Leaves
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+
+                        <div class="active" id="leaveItemsDiv">
+                            <ul class="nav nav-list">
+                                <li class="cursor"><a href="javascript:void(0)" id="applyLeaveRef" onclick="navigateTo(LEAVES)">Apply Leave</a></li>
+                                <li class="cursor"><a href="javascript:void(0)" id="leaveReportRef" onclick="navigateTo(LEAVEREPORT)">Leave Reports</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li id="empReportRef" onclick="navigateTo(REPORTS)">
+                        <a href="javascript:void(0)">
+                            <i class="pe-7s-news-paper"></i>
+                            <p>Reports</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="javascript:void(0)">Profile</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right" style="padding-right:1em">
+                            <li class="dropdown cursor">
+                                <a href="javascript:void(0)" class="dropdown-toggle usr_drpdwn" data-toggle="dropdown">
+                                    <label id="wlcmMsgLabel" class="wlcmMsg"></label>
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li class="cursor"><a href="javascript:void(0)" id="chngPwdRef" onclick="navigateTo(CHANGEPASSWORD)">Change Password</a></li>
+                                    <li class="cursor"><a href="javascript:void(0)" id="signoutRef" onclick="initSignOut()">Sign Out</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="userProfileDiv" class="contentDiv">
+                            @Html.Partial("Profile")
+                        </div>
+                        <div id="AttendanceDiv" class="contentDiv" style="display:none">
+                            @Html.Partial("Attendance")
+                        </div>
+                        <div id="LeaveDetailsDiv" class="contentDiv" style="display:none">
+                            @Html.Partial("LeaveDetails")
+                        </div>
+                        <div id="LeaveReportDiv" class="contentDiv" style="display:none">
+                            @Html.Partial("LeaveReports")
+                        </div>
+                        <div id="EmpReportDiv" class="contentDiv" style="display:none">
+                            @Html.Partial("EmployeeReports")
+                        </div>
+                        <div id="ChngPwdDiv" class="contentDiv" style="display:none">
+                            @Html.Partial("ChangePassword")
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        @Html.Hidden("UserPhotoPath")
+                        <div class="card">
+                            <div class="content">
+                                <div class="row text-center">
+                                    <div class="col-lg-12">
+                                        <div id="effect-5" class="effects clearfix imgContainer">
+                                            <div class="img avatar cursor" style="width:170px;height:150px;margin: 0 auto;">
+                                                <img id="userAvatar" width="170" height="150" />
+                                                <input id="userPhotoInput" type="file" accept="image/gif,image/jpeg,image/jpg,image/png" name="yourinputname"
+                                                       style="display: none;" onchange="fileCheck(this);" />
+
+                                                <div class="overlay" style="height:100%;width:100%;display:table">
+                                                    <div class="row" style="display:table-cell;vertical-align:middle">
+                                                        <div class="col-lg-12">
+                                                            <span class="text-center">
+                                                                <a class="button" id="usrAvatarExpndBtn" href="javascript:void(0)">
+                                                                    <i class="fa fa-upload fa-lg" aria-hidden="true"></i>&nbsp;  Upload Photo
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <span class="text-center">
+                                                                <a class="button" id="TakePhotoBtn" onclick="takePhotoClick()" href="javascript:void(0)">
+                                                                    <i class="fa fa-camera fa-lg" aria-hidden="true"></i>&nbsp;  Take Photo
+                                                                </a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <h3 class="title" id="empNameDisp"></h3>
+                                </div>
+                                <br />
+                                <div class="row text-center" id="saveDiv" style="display:none">
+                                    <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 text-center">
+                                        <label class="h5">Save Changes?</label>
+
+                                        <button class="btn btn-primary btn-sm btn-fill" type="button" height="35" width="35" title="Save"
+                                                onclick="ChangeUserPhoto(false)" style="border-radius:5px;border:none">
+                                            <i class="fa fa-check fa-2x" aria-hidden="true"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm btn-fill" type="button" height="35" width="35" title="Cancel"
+                                                onclick="ChangeUserPhoto(true)" style="border-radius:5px;border:none">
+                                            <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade col-lg-12 col-md-12 col-sm-12 col-xs-12" id="CapturePhotoDiv" role="dialog">
+                <div class="modal-dialog">
+
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 class="modal-title text-center">Capture Photo</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-lg-12 cameraDiv">
+                                        <div id="Camera"></div>
+                                    </div>
+                                    <div class="col-lg-12 capturePreviewDiv">
+                                        <img id="show" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-lg-12 text-center">
+                                <input type="button" class="btn btn-info btn-fill cameraDiv" value="Capture" onclick="webcam.capture();" />
+                                <div class="capturePreviewDiv text-center">
+                                    <label class="">Save Changes?</label>
+
+                                    <button class="btn btn-primary btn-sm btn-fill" type="button" height="35" width="35" title="Save"
+                                            onclick="ChangeUserPhoto(false);toggleCaptureWindow(true)" style="border-radius:5px;border:none">
+                                        <i class="fa fa-check fa-2x" aria-hidden="true"></i>
+                                    </button>
+                                    <button class="btn btn-primary btn-sm btn-fill" type="button" height="35" width="35" title="Cancel"
+                                            onclick="ChangeUserPhoto(true);toggleCaptureWindow(false)" style="border-radius:5px;border:none">
+                                        <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script src="~/Scripts/jquery.webcam.min.js"></script>
+<script type="text/javascript">
+    function UploadPic() {
+        $.ajax({
+            type: 'POST',
+            url: ("@Url.Content("~/CapturePhoto/Rebind")/"),
+            dataType: 'json',
+            success: function (data) {
+                var path = "../Content/UserIcons/" + data;
+                $("#show").attr('src', path);
+
+                $('.cameraDiv').hide();
+                $('.capturePreviewDiv').show();
+                $('#UserPhotoPath').val(path);
+            }
+        });
+    };
+    $("#Camera").webcam({
+        width: 320,
+        height: 240,
+        mode: "save",
+        swffile: "@Url.Content("~/Scripts/jscam.swf")",
+        onTick: function () { },
+        onSave: function () {
+            UploadPic();
+        },
+        onCapture: function () {
+            webcam.save("@Url.Content("~/CapturePhoto/Capture")/");
+        },
+        debug: function () { },
+        onLoad: function () { }
+    });
+    var empName;
+    var ExtChkFlg=false;
+    var IsDefaultUserIcon = false;
+    DisableFields();
+    navigateTo(PROFILE);
+    initPage();
+    function toggleCaptureWindow(IsClosable){
+        if(!IsClosable)
+        {
+            $('.cameraDiv').show();
+            $('.capturePreviewDiv').hide();
+        }
+        else{
+            $('#CapturePhotoDiv').modal('toggle');
+        }
+    }
+    function ChangeUserPhoto(flag){
+
+        var userPhotoPath = $('#UserPhotoPath').val();
+        var prvUserPhotoPath = userPhoto;
+
+        if(IsDefaultUserIcon)
+        {
+            prvUserPhotoPath = null;
+        }
+        var UpdateUserPhoto = {};
+        UpdateUserPhoto.url = "/UploadPhoto/UpdateUserPhoto";
+        UpdateUserPhoto.type = "POST";
+        UpdateUserPhoto.data = JSON.stringify({empid:empId,userphotopath:userPhotoPath,prvUserPhotoPath:prvUserPhotoPath,CancelFlag:flag});
+        UpdateUserPhoto.datatype = "json";
+        UpdateUserPhoto.contentType = "application/json";
+
+        UpdateUserPhoto.success = function (status) {
+
+            if(status == "OK")
+            {
+                $('#saveDiv').hide();
+                userPhoto = userPhotoPath;
+                $('#userAvatar').attr('src',userPhotoPath);
+            }
+            else if(status == "CANCEL")
+            {
+                $('#saveDiv').hide();
+                $('#userAvatar').attr('src',userPhoto);
+                $('.cameraDiv').show();
+                $('.capturePreviewDiv').hide();
+            }
+            else{
+                showMessageBox(ERROR,"An Unexpected Error Occured!!");
+            }
+        };
+
+        UpdateUserPhoto.error = function () {
+            showMessageBox(ERROR,"An Unexpected Error Occured!!");
+        };
+        $.ajax(UpdateUserPhoto);
+    }
+    function takePhotoClick(){
+        toggleCaptureWindow();
+        $('#CapturePhotoDiv').modal('show');
+    }
+    $('#usrAvatarExpndBtn').click(function(){
+
+        try{
+            $('#userPhotoInput').trigger('click');
+        }
+        catch(ex)
+        {
+            showMessageBox(ERROR,"ERROR !!");
+        }
+    })
+    function fileCheck(obj) {
+        ExtChkFlg = false;
+        var fileExtension = ['jpeg', 'jpg', 'png', 'gif', 'bmp'];
+        if ($.inArray($(obj).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+            showMessageBox(WARNING,"Only '.jpeg','.jpg', '.png', '.gif', '.bmp' formats are allowed.");
+        }
+        else{
+            ExtChkFlg = true;
+        }
+    }
+    $("#userPhotoInput").change(function () {
+        if(ExtChkFlg)
+        {
+            var data = new FormData();
+            var files = $("#userPhotoInput").get(0).files;
+
+            if (files.length > 0) {
+                data.append("MyImages", files[0]);
+            }
+
+            $.ajax({
+                url: "/UploadPhoto/UploadFile",
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (response) {
+                    //code after success
+                    var path = "../Content/UserIcons/" + response;
+                    $('#userAvatar').attr('src',path);
+                    $('#UserPhotoPath').val(path);
+                    $('#saveDiv').show();
+                },
+                error: function (er) {
+                    showMessageBox(ERROR,er);
+                }
+            });
+        }
+    });
+    function initPage()
+    {
+        if (Modernizr.touch) {
+            $(".close-overlay").removeClass("hidden");
+            $(".img").click(function(e){
+                if (!$(this).hasClass("hover")) {
+                    $(this).addClass("hover");
+                }
+            });
+            $(".close-overlay").click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                if ($(this).closest(".img").hasClass("hover")) {
+                    $(this).closest(".img").removeClass("hover");
+                }
+            });
+        } else {
+            $(".img").mouseenter(function(){
+                $(this).addClass("hover");
+            })
+            .mouseleave(function(){
+                $(this).removeClass("hover");
+            });
+        }
+    }
+    function setUserPhoto()
+    {
+        if(userPhoto == null || userPhoto == "")
+        {
+            var maleAvatarPath = "../Content/Images/male-avatar.png";
+            var femaleAvatarPath = "../Content/Images/female-avatar.png";
+
+            if(UserGender == "M")
+            {
+                $('#userAvatar').attr('src',maleAvatarPath);
+            }
+            else if(UserGender == "F")
+            {
+                $('#userAvatar').attr('src',femaleAvatarPath);
+            }
+
+            userPhoto =  $('#userAvatar').attr('src');
+            IsDefaultUserIcon = true;
+        }
+        else{
+            $('#userAvatar').attr('src',userPhoto);
+        }
+    }
+    function initSignOut() {
+        var initSignout = {};
+        initSignout.url = "/Login/Logout";
+        initSignout.type = "GET";
+        initSignout.datatype = "json";
+        initSignout.contentType = "application/json";
+        initSignout.success = function (status) {
+            var url = "/Login";
+            window.location.href = url;
+        };
+        initSignout.error = function () {
+        };
+        $.ajax(initSignout);
+    }
+    function getEmpDetails()
+    {
+        showLoadreport("#imgProgProf","#EmpProfileForm");
+        var getEmpDetails = {};
+        getEmpDetails.url = "/User/getEmployeeInfo";
+        getEmpDetails.type = "POST";
+        getEmpDetails.data = JSON.stringify({ empId: empId });
+        getEmpDetails.datatype = "json";
+        getEmpDetails.contentType = "application/json";
+        getEmpDetails.success = function (status) {
+            if(stringIsNull(status))
+            {
+            }
+            else{
+                var response = JSON.parse(status);
+                var names = response.EmpName.split(' ');
+                var firstName;
+                var lastName;
+                if(names != null)
+                {
+                    firstName = names[0];
+
+                    if (names.length == 2)
+                    {
+                        lastName = names[1];
+                    }
+                    else if (names.length > 2)
+                    {
+                        lastName = names[1] + " " + names[2];
+                    }
+                }
+                $('#SelRole').val(userType);
+                $('#SelGender').val(UserGender);
+                if(UserGender == "M")
+                {
+                    $('#EmpGender').val("MALE");
+                }
+                else if(UserGender == "F")
+                {
+                    $('#EmpGender').val("FEMALE");
+                }
+                empName = response.EmpName;
+                $('#empNameDisp').text(response.EmpName);
+                $('#wlcmMsgLabel').text("Welcome, " + firstName);
+                $('#EmpFirstName').val(firstName);
+                $('#EmpLastName').val(lastName);
+            }
+            HideLoadreport("#imgProgProf","#EmpProfileForm");
+        };
+        getEmpDetails.error = function () {
+        };
+        $.ajax(getEmpDetails);
+    }
+    function setCurrentDateTime() {
+        var currentTime = new Date();
+        var date = currentTime.toDateString();
+        var time = currentTime.toLocaleTimeString();
+
+        $('#currentDate').text(date.toString());
+        $('#currentTime').text(time.toString());
+
+        $('#DateLabelLeave').val("As of Date : " + date.toString());
+
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        var seconds = currentTime.getSeconds();
+    }
+    function getEmpPunchDetails()
+    {
+        showLoadreport("#imgProgAtt",".attnCntDiv");
+        $('#notesField').val('');
+        var GetAttendance = {};
+        GetAttendance.url = "/User/GetEmpPunchDetails";
+        GetAttendance.type = "POST";
+        GetAttendance.data = JSON.stringify({ EmpId: empId,timeoffset:offset });
+        GetAttendance.datatype = "json";
+        GetAttendance.contentType = "application/json";
+        GetAttendance.success = function (status) {
+            var response = JSON.parse(status);
+            if (stringIsNull(response)) {
+                $('#punhInBtn').show();
+                $('#punchdInDiv').hide();
+                $('#punhOutBtn').hide();
+                $('#punchdOutDiv').hide();
+            }
+            else if (response["PunchinTime"].length > 0 && response["PunchoutTime"].length > 0) {
+                $('#punhInBtn').show();
+                $('#punhOutBtn').hide();
+                $('#PunchedInTime').text((response["PunchinTime"]));
+                $('#PunchedOutTime').text((response["PunchoutTime"]));
+                $('#punchdInDiv').hide();
+                $('#punchdOutDiv').hide();
+            }
+            else if (response["PunchinTime"].length > 0 && response["PunchoutTime"].length == 0) {
+                $('#punhInBtn').hide();
+                $('#punhOutBtn').show();
+                $('#PunchedInTime').text((response["PunchinTime"]));
+                $('#punchdInDiv').show();
+                $('#punchdOutDiv').hide();
+            }
+            HideLoadreport("#imgProgAtt",".attnCntDiv");
+        };
+        GetAttendance.error = function () {
+            HideLoadreport("#imgProgAtt",".attnCntDiv");
+        };
+        $.ajax(GetAttendance);
+    }
+    function leaveRefClick()
+    {
+        $(".main-nav li").removeClass("active");
+        $(LEAVES_LI).addClass("active");
+    }
+    function navigateTo(page) {
+        var activeElement;
+        var activeContentDiv;
+        switch (page) {
+            case PROFILE:
+                clearErrors();
+                getEmpDetails();
+                setUserPhoto();
+                activeElement = PROFILE_LI;
+                activeContentDiv = PROFILE_DIV;
+                break;
+            case ATTENDANCE:
+                clearErrors();
+                setCurrentDateTime();
+                getEmpPunchDetails();
+                activeElement = ATTENDANCE_LI;
+                activeContentDiv = ATTENDANCE_DIV;
+                break;
+            case LEAVES:
+                clearErrors();
+                ResetValues();
+                activeElement = LEAVES_LI;
+                activeContentDiv = LEAVES_DIV;
+                break;
+            case LEAVEREPORT:
+                clearErrors();
+                $("#chngDatePicker").val('');
+                setLeaveReportsInfo(true);
+                PopulateLeaveReportTable();
+                activeContentDiv = LEAVEREPORT_DIV;
+                break;
+            case REPORTS:
+                clearErrors();
+                var dateObj = new Date();
+                var month = dateObj.getUTCMonth() + 1; //months from 1-12
+                var year = dateObj.getUTCFullYear();
+                $('#YearDropDown').val(year);
+                $('#MonthDropDown').val(month);
+                activeElement = REPORTS_LI;
+                activeContentDiv = REPORTS_DIV;
+                break;
+            case CHANGEPASSWORD:               
+                clearFileds();
+                clearErrors();
+                activeContentDiv = CHANGEPASSWORD_DIV;
+                break;
+        }
+
+        $('.contentDiv').hide();
+        $(activeContentDiv).show();
+
+        $(".main-nav li").removeClass("active");
+        $(activeElement).addClass("active");
+    }
+    function clearErrors()
+    {
+        $('.errLabel').hide();
+        $('.input-field').css('border-color','');
+        $('.inut-field-profile').css('border-color','');
+    }
+    function showLoadreport(activDiv,disableDiv) {
+        $(activDiv).show();
+        $(disableDiv).addClass("disablediv");
+        $(".waitIconDiv").css("display", "block");
+    }
+    function HideLoadreport(activDiv,disableDiv) {
+        $(activDiv).hide();
+        $(disableDiv).removeClass("disablediv");
+        $(".waitIconDiv").css("display", "none");
+    }
+    function setLeaveReportsInfo(InitFlag)
+    {
+        if(InitFlag)
+        {
+            var currentTime = new Date();
+            var date = currentTime.toDateString();
+            var dateSplit = date.split(' ');
+            $('#monthLabel').text("Showing Leave Reports Of : " + dateSplit[1] + "," + dateSplit[3]);
+            $('#dateLabel').text(" Details As Of : " + date);
+            currYear = dateSplit[3];
+            currMonth = (currentTime.getMonth()) + 1;
+        }
+        else
+        {
+            var date = $("#chngDatePicker").val();
+            currMonth = months[date.split(' ')[0]];
+            currYear = date.split(' ')[1];
+            $('#MonthDropDown').val(currMonth);
+            $('#monthLabel').text("Showing Leave Reports Of : " + $('#MonthDropDown').find('option:selected').text() + "," + currYear);
+        }
+    }
+    function PopulateLeaveReportTable()
+    {
+        var statusIconPath;
+        var statusToolTip;
+        var IsEdit = false;
+        var IsRejected = false;
+
+        $('#lblLvNoResults').hide();
+        showLoadreport("#imgProgLvRprt",".TableDivLvRprt");
+        if (LeaveDetailsTable != undefined) {           
+            LeaveDetailsTable.destroy();
+        }
+        LeaveDetailsTable = $('#LvReprtTable').DataTable({
+            "pageLength": 7, "processing": true, "serverSide": true,
+            "paging": true, "bLengthChange": false, "searching": false,
+            "bInfo": true,
+            "ajax": {
+                "url": "/User/GetLeaveDetails",
+                "type": "POST",
+                "dataType": "JSON",
+                "data": function (d) {
+                    d.EmpId = empId;
+                    d.UserType = userType;
+                    d.month = currMonth;
+                    d.year = currYear;
+                }                
+            }
+            ,"columnDefs": [
+                {
+                    "render": function ( data, type, row ) {                        
+                        var result = leaveRprtTableCallBack(row);                        
+                        statusToolTip = result["statusToolTip"];
+                        IsEdit =result["IsEdit"];
+                        IsRejected = result["IsRejected"];
+                        return '<input type="button" data-toggle="modal" data-target="#EditLeaveModal" title="View Details" value="View" class="btn btn-primary btn-fill ViewLeaveDetails" data-IsCancel = "'+ row["_cancelled"] +'" data-IsRejected = "'+ IsRejected +'" data-IsEdit="' + IsEdit + '" data-empid="' + empId + '" data-empname="' + empName + '" data-fromDate="' + row["_fromdate"] + '" data-toDate="' + row["_todate"] + '" data-LeaveType="' + row["_strLvType"] + '" data-DurationType="' + row["_leavedurationtype"] + '" data-lvDurTypint="' + row["_leaveDurTypeInt"] + '" data-LeaveStatus="' + statusToolTip + '" data-leaveTypeInt="' + row["_leaveType"] + '" data-commnets="' + row["_comments"] + '"  data-id="' + row["_lvId"] + '" />'
+                    },
+                    "targets": 5
+                }
+                ,
+                {
+                    "render": function ( data, type, row ) {
+                        var result = leaveRprtTableCallBack(row);                       
+                        statusIconPath = result["statusIconPath"];
+                        statusToolTip = result["statusToolTip"];                       
+                        return '<span class="cursor"><i class="'+ statusIconPath +'" aria-hidden="true" title="'+ statusToolTip +'"></i></span>'
+                    },
+                    "targets": 4
+                }
+            ]
+            , "columns": [
+                { "data": "_fromdate" },
+                { "data": "_todate" },
+                { "data": "_strLvType" },
+                { "data": "_leavedurationtype" },
+                { "data": "_leaveStatus" },
+                { "data": "_leaveStatus" }
+            ]
+            ,"language":
+                {
+                        "processing": "<div class='row text-center waitIcon'><img alt='Progress' src='../Content/images/wait_icon.gif' width='50' height='50'/></div>"
+                }
+        });
+
+        HideLoadreport("#imgProgLvRprt",".TableDivLvRprt");
+        $('#lblLvNoResults').hide();
+        $('.TableDivLvRprt').show();
+
+        //var GetLeaveDetails = {};
+        //GetLeaveDetails.url = "/User/GetLeaveDetails";
+        //GetLeaveDetails.type = "POST";
+        //GetLeaveDetails.data = JSON.stringify({EmpId:empId,UserType:userType,month: currMonth ,year: currYear});
+        //GetLeaveDetails.datatype = "json";
+        //GetLeaveDetails.contentType = "application/json";
+        //GetLeaveDetails.success = function (status) {
+        //    if(stringIsNull(status))
+        //    {
+        //        LeaveDetailsTable.clear().draw();
+        //        HideLoadreport("#imgProgLvRprt",".TableDivLvRprt");
+        //        $('.TableDivLvRprt').hide();
+        //        $('#lblLvNoResults').show();
+        //    }
+        //    else{
+        //        try{
+        //            var response = JSON.parse(status);
+        //            LeaveDetailsTable.clear().draw();
+        //            var statusIconPath;
+        //            var statusToolTip;
+        //            var IsEdit = false;
+        //            var IsRejected = false;
+        //            if(response != null && response.length > 0)
+        //            {
+        //                $('#lblLvNoResults').hide();
+        //                $('.TableDivLvRprt').show();
+        //                for (var i = 0; i <= response.length - 1; i++) {
+
+        //                    if(response[i]._status && !response[i]._rejected && !response[i]._cancelled)//approved.
+        //                    {
+        //                        statusIconPath = "fa fa-check fa-lg";
+        //                        statusToolTip = "Approved";
+        //                        IsEdit = false;
+        //                        IsRejected = false;
+        //                    }
+        //                    else if(!response[i]._status && !response[i]._rejected && !response[i]._cancelled)//pending.
+        //                    {
+        //                        statusIconPath = "fa fa-clock-o fa-lg";
+        //                        statusToolTip = "Pending";
+        //                        IsEdit = true;
+        //                        IsRejected = false;
+        //                    }
+        //                    else if(!response[i]._status && response[i]._rejected && !response[i]._cancelled)//rejected.
+        //                    {
+        //                        statusIconPath = "fa fa-times fa-lg";
+        //                        statusToolTip = "Rejected";
+        //                        IsEdit = false;
+        //                        IsRejected = true;
+        //                    }
+        //                    else if(!response[i]._status && !response[i]._rejected && response[i]._cancelled)//cancelled.
+        //                    {
+        //                        statusIconPath = "fa fa-ban fa-lg";
+        //                        statusToolTip = "Cancelled";
+        //                        IsEdit = false;
+        //                        IsRejected = false;
+        //                    }
+        //                    LeaveDetailsTable.row.add({
+        //                        0: response[i]._fromdate,
+        //                        1:response[i]._todate,
+        //                        2:response[i]._strLvType,
+        //                        3: response[i]._leavedurationtype,
+        //                        4:'<span class="cursor"><i class="'+ statusIconPath +'" aria-hidden="true" title="'+ statusToolTip +'"></i></span>',
+        //                        5:'<input type="button" data-toggle="modal" data-target="#EditLeaveModal" title="View Details" value="View" class="btn btn-primary btn-fill ViewLeaveDetails" data-IsCancel = "'+ response[i]._cancelled +'" data-IsRejected = "'+ IsRejected +'" data-IsEdit="' + IsEdit + '" data-empid="' + empId + '" data-empname="' + empName + '" data-fromDate="' + response[i]._fromdate + '" data-toDate="' + response[i]._todate + '" data-LeaveType="' + response[i]._strLvType + '" data-DurationType="' + response[i]._leavedurationtype + '" data-lvDurTypint="'+response[i]._leaveDurTypeInt+'" data-LeaveStatus="' + statusToolTip + '" data-leaveTypeInt="'+response[i]._leaveType+'" data-commnets="' + response[i]._comments + '"  data-id="' + response[i]._lvId + '" />'}).draw();
+        //                }
+        //            }
+        //            else{
+        //                $('#lblLvNoResults').show();
+        //                $('.TableDivLvRprt').hide();
+        //            }
+        //            HideLoadreport("#imgProgLvRprt",".TableDivLvRprt");
+        //        }
+        //        catch(ex)
+        //        {
+        //        }
+        //    }
+        //};
+        //GetLeaveDetails.error = function () {
+        //    HideLoadreport();
+        //    showMessageBox(ERROR,"An UnExpected Error Occured !!");
+        //};
+        //$.ajax(GetLeaveDetails);
+    }
+    function leaveRprtTableCallBack(row)
+    {
+        var statusIconPath;
+        var statusToolTip;
+        var IsEdit = false;
+        var IsRejected = false;
+
+        if(row["_status"] && !row["_rejected"] && !row["_cancelled"])//approved.
+        {
+            statusIconPath = "fa fa-check fa-lg";
+            statusToolTip = "Approved";
+            IsEdit = false;
+            IsRejected = false;
+        }
+        else if(!row["_status"] && !row["_rejected"] && !row["_cancelled"])//pending.
+        {
+            statusIconPath = "fa fa-clock-o fa-lg";
+            statusToolTip = "Pending";
+            IsEdit = true;
+            IsRejected = false;
+        }
+        else if(!row["_status"] && row["_rejected"] && !row["_cancelled"])//rejected.
+        {
+            statusIconPath = "fa fa-times fa-lg";
+            statusToolTip = "Rejected";
+            IsEdit = false;
+            IsRejected = true;
+        }
+        else if(!row["_status"] && !row["_rejected"] && row["_cancelled"])//cancelled.
+        {
+            statusIconPath = "fa fa-ban fa-lg";
+            statusToolTip = "Cancelled";
+            IsEdit = false;
+            IsRejected = false;
+        }
+
+        return {statusIconPath:statusIconPath,statusToolTip:statusToolTip,IsEdit:IsEdit,IsRejected:IsRejected};
+    }
+    $(document).ready(function () {
+        $('#EmpDateOfBirth').datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $('#PunchStartDate').datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $('#PunchEndDate').datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $('#Fromdatetimepicker').datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $('#Todatetimepicker').datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $("#chngDatePicker").datepicker({
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
+            dateFormat: 'MM yy',
+            beforeShow: function(input) {
+                $(input).datepicker("widget").addClass('hide-calendar');
+            },
+            onClose: function(dateText, inst) {
+                $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1));
+            }
+        });
+        $("#LvstartDateLabel").datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+        $("#LvtoDateLabel").datepicker({
+            format: "dd/mm/yyyy",
+            changeMonth: true,
+            changeYear: true,
+            beforeShow: function(input) {
+                $(input).datepicker("widget").removeClass('hide-calendar');
+            }
+        });
+
+        //var d = new Date();
+        //var usertime = d.toLocaleString();
+
+        //// Some browsers / OSs provide the timezone name in their local string:
+        //var tzsregex = /\b(ACDT|ACST|ACT|ADT|AEDT|AEST|AFT|AKDT|AKST|AMST|AMT|ART|AST|AWDT|AWST|AZOST|AZT|BDT|BIOT|BIT|BOT|BRT|BST|BTT|CAT|CCT|CDT|CEDT|CEST|CET|CHADT|CHAST|CIST|CKT|CLST|CLT|COST|COT|CST|CT|CVT|CXT|CHST|DFT|EAST|EAT|ECT|EDT|EEDT|EEST|EET|EST|FJT|FKST|FKT|GALT|GET|GFT|GILT|GIT|GMT|GST|GYT|HADT|HAEC|HAST|HKT|HMT|HST|ICT|IDT|IRKT|IRST|IST|JST|KRAT|KST|LHST|LINT|MART|MAGT|MDT|MET|MEST|MIT|MSD|MSK|MST|MUT|MYT|NDT|NFT|NPT|NST|NT|NZDT|NZST|OMST|PDT|PETT|PHOT|PKT|PST|RET|SAMT|SAST|SBT|SCT|SGT|SLT|SST|TAHT|THA|UYST|UYT|VET|VLAT|WAT|WEDT|WEST|WET|WST|YAKT|YEKT)\b/gi;
+
+        //// In other browsers the timezone needs to be estimated based on the offset:
+        //var timezonenames = {"UTC+0":"GMT","UTC+1":"CET","UTC+2":"EET","UTC+3":"EEDT","UTC+3.5":"IRST","UTC+4":"MSD","UTC+4.5":"AFT","UTC+5":"PKT","UTC+5.5":"IST","UTC+6":"BST","UTC+6.5":"MST","UTC+7":"THA","UTC+8":"AWST","UTC+9":"AWDT","UTC+9.5":"ACST","UTC+10":"AEST","UTC+10.5":"ACDT","UTC+11":"AEDT","UTC+11.5":"NFT","UTC+12":"NZST","UTC-1":"AZOST","UTC-2":"GST","UTC-3":"BRT","UTC-3.5":"NST","UTC-4":"CLT","UTC-4.5":"VET","UTC-5":"EST","UTC-6":"CST","UTC-7":"MST","UTC-8":"PST","UTC-9":"AKST","UTC-9.5":"MIT","UTC-10":"HST","UTC-11":"SST","UTC-12":"BIT"};
+
+        //var timezone = usertime.match(tzsregex);
+        //if (timezone) {
+        //    timezone = timezone[timezone.length-1];
+        //} else {
+        //    var offset = -1*d.getTimezoneOffset()/60;
+        //    offset = "UTC" + (offset >= 0 ? "+" + offset : offset);
+        //    timezone = timezonenames[offset];
+        //}
+        //console.log(usertime);
+        //console.log(offset);
+        //console.log(timezone);
+    });
+</script>

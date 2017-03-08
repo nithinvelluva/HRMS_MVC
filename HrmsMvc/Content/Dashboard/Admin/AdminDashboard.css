@@ -1,0 +1,63 @@
+﻿.disablediv {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.WaitdivPage {
+    /*display: none;*/
+    position: fixed;
+    top: 70%;
+    left: 55%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 40%;
+    height: 50%;
+}
+
+button, input, optgroup, select, textarea {
+    margin: 0;
+    font: inherit;
+    color: #000;
+}
+
+.user-container {
+    padding-top: 15px !important;
+}
+
+.modal-backdrop {
+    position: relative;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+}
+
+.cardContainer {
+    padding-top: 15px;
+}
+
+.usrAvatar {
+    height: 140px;
+    width: 90%;
+    cursor: pointer;
+    margin-top: 5%;
+}
+
+.matcard {
+    width: 100%;
+    box-shadow: 0 4px 8px 0 #777;
+    transition: 0.3s;
+    cursor: pointer;
+    display: inline-block;
+    float: none;
+    background: #ffffff;
+    text-align: center;
+}
+
+#AddEmpModal .modal-content {
+    width: 100%;
+    max-width: 550px;
+    margin: 0 auto;
+}
