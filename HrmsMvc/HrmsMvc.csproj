@@ -108,7 +108,6 @@
     <Content Include="Content\datepicker.min.css" />
     <Content Include="Content\datepicker3.min.css" />
     <Content Include="Content\Dashboard\User\Imageoverlay.css" />
-    <Content Include="Content\Images\home-screen-bknd.jpg" />
     <Content Include="Content\Images\avatar.png" />
     <Content Include="Content\Images\female-avatar.png" />
     <Content Include="Content\Images\icon-crm.ico" />
