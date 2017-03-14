@@ -51,6 +51,7 @@ namespace HrmsMvc.Controllers
         [RequireHttps]
         public ActionResult Login(LoginModel lobj)
         {
+            ViewBag.ErrorMsg = "";
             string userName = lobj.UserName;
             string password = lobj.Password;
             bool status = true;

@@ -2,7 +2,6 @@
     ViewBag.Title = "HRMS";
 }
 @model HrmsMvc.Models.LoginModel
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,8 +11,8 @@
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
     <style>
-        #ErrorMsg{
-            display:none;
+        #ErrorMsg {
+            display: none;
         }
     </style>
 </head>
@@ -26,8 +25,8 @@
                 <form autocomplete="off">
                     <div class="login-card">
                         <h2 class="text-center">HRMS</h2><br>
-                        @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", @id = "usernamebx" })
-                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password", @id = "passwordbx" })
+                        @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", onblur = "onBlurInput()" })
+                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password", onblur = "onBlurInput()" })
                         @Html.Label("Invalid credentials", new { @id = "ErrorMsg", @class = "text-danger" })
                         <input type="submit" name="login" class="login login-submit btn btn-primary btn-fill" value="Sign In">
                         <br />
@@ -42,19 +41,23 @@
     </div>
 </body>
 </html>
-
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#usernamebx').val('');
-        $('#passwordbx').val('');
-        $('#usernamebx').focus();
-        var error = @Html.Raw(Json.Encode(ViewBag.ErrorMsg));      
+        $('#UserName').val('');
+        $('#Password').val('');
+        $('#UserName').focus();
+        var error = @Html.Raw(Json.Encode(ViewBag.ErrorMsg));
         if(error!=null)
         {
             $('#ErrorMsg').show();
             $('#ErrorMsg').text(error);
         }
     });
-</script>
 
+    function onBlurInput(){
+        if ($('#UserName').val().toString().length > 0 && $('#Password').val().toString().length > 0) {           
+            $('#ErrorMsg').hide();
+        }
+    }   
+</script>
 
