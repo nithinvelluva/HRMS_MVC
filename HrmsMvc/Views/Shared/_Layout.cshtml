@@ -18,7 +18,16 @@
     <script src="~/Scripts/Helpers/Common.js"></script>
 </head>
 <body>
-    <div class="container body-content">       
+    <div class="container body-content">
+        <div className="header">
+            <div className="nav-container">
+                <div className="nav-logo text-center">
+                    <a className="" href="/">
+                        <img src="/assets/app_icon.png" id="logoimg"></img>
+                    </a>
+                </div>
+            </div>
+        </div>   
         @RenderBody()
         <footer class="text-center">
             <p style="color:#000000">&copy; @DateTime.Now.Year - Hrms Application</p>
