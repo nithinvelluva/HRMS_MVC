@@ -5,11 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HRMS</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
-    <meta name="viewport" content="width=device-width" />
+    <title>HRMS</title>    
     <style>
         #ErrorMsg {
             display: none;
@@ -25,8 +21,9 @@
                 <form autocomplete="off">
                     <div class="login-card">
                         <h2 class="text-center">HRMS</h2><br>
-                        @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", onblur = "onBlurInput()" })
-                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password", onblur = "onBlurInput()" })
+                        @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", onblur = "onBlurInput()"})
+                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password",
+                            onblur = "onBlurInput()"})
                         @Html.Label("Invalid credentials", new { @id = "ErrorMsg", @class = "text-danger" })
                         <input type="submit" name="login" class="login login-submit btn btn-primary btn-fill" value="Sign In">
                         <br />
@@ -55,7 +52,8 @@
     });
 
     function onBlurInput(){
-        if ($('#UserName').val().toString().length > 0 && $('#Password').val().toString().length > 0) {           
+        if ($('#UserName').val().toString().length > 0 
+            && $('#Password').val().toString().length > 0) {           
             $('#ErrorMsg').hide();
         }
     }   

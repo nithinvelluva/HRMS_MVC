@@ -32,7 +32,7 @@ namespace HrmsMvc.Controllers
 
                 if (UserType == 1)
                 {
-                    return RedirectToAction("AdminDashboard", "Admin");
+                    return RedirectToAction("AdminDashboard","Admin");
                 }
                 else
                 {
@@ -102,7 +102,7 @@ namespace HrmsMvc.Controllers
             }
             else
             {
-                return RedirectToAction("Login", "Login");
+                return RedirectToAction("Login","Login");
             }
         }
 
@@ -145,18 +145,7 @@ namespace HrmsMvc.Controllers
         {
             Regex RegexEmail = new Regex(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$");
             Regex mobRgx = new Regex(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$");
-
-            //int Id = Convert.ToInt32(fm["EmpId"]);
-            //string empName = fm["EmpName"];
-            //string gender = fm["SelGender"];
-            //string role = fm["UserRole"];
-            //string dateOfBirth = fm["EmpDateOfBirth"];
-            //string userName = fm["UserName"];
-            //string password = fm["Password"];
-            //string cnfrmPassword = fm["CnfrmPassword"];
-            //string emailId = fm["EmailId"];
-            //string phoneNumber = fm["PhoneNumber"];
-            //string UserPhotoPath = fm["UserPhotoPath"];
+            
 
             EmployeeModel em = null;
             string errStr = string.Empty;
@@ -173,10 +162,6 @@ namespace HrmsMvc.Controllers
             {
                 errStr = errStr + "3:";
             }
-            //if (string.IsNullOrEmpty(role) || (!string.IsNullOrEmpty(role) && Convert.ToInt32(role) <= 0))
-            //{
-            //    errStr = errStr + "3:";
-            //}
             if (string.IsNullOrEmpty(dob))
             {
                 errStr = errStr + "4:";
@@ -185,18 +170,10 @@ namespace HrmsMvc.Controllers
             {
                 errStr = errStr + "5:";
             }
-            //if (string.IsNullOrEmpty(password))
-            //{
-            //    errStr = errStr + "6:";
-            //}
             if (string.IsNullOrEmpty(cnfPwd))
             {
                 errStr = errStr + "7:";
             }
-            //if (!string.IsNullOrEmpty(password) && !string.IsNullOrEmpty(cnfPwd) && password != cnfPwd)
-            //{
-            //    errStr = errStr + "8:";
-            //}
             if (!string.IsNullOrEmpty(dob))
             {
                 TimeSpan ts = new TimeSpan();
@@ -240,27 +217,12 @@ namespace HrmsMvc.Controllers
                 em.DateOfBirth = dob;
                 em.PhoneNumber = phone;
                 em.EmailId = email;
-                string UserPhotoPath = "";
-                if (!string.IsNullOrEmpty(UserPhotoPath))
-                {
-                    em.UserPhotoPath = UserPhotoPath;
-                }
-                else
-                {
-                    em.UserPhotoPath = "";
-                }
+                em.UserPhotoPath = "";
+                      
                 if (Convert.ToInt32(Id) > 0)
                 {
                     string rtrnStr = Db.UpdateProfile(em);
-
-                    if (string.IsNullOrEmpty(rtrnStr))
-                    {
-                        em.ErrorString = "";
-                    }
-                    else
-                    {
-                        em.ErrorString = rtrnStr;
-                    }
+                    em.ErrorString = string.IsNullOrEmpty(rtrnStr) ? "" : rtrnStr;
 
                     return serializer.Serialize(em);
                 }
@@ -303,7 +265,7 @@ namespace HrmsMvc.Controllers
 
                 if (string.IsNullOrEmpty(rtrnStr))
                 {
-                    rtrnStr = Db.UpdateUserPassword(empid, currPwd, nwPwd);                   
+                    rtrnStr = Db.UpdateUserPassword(empid, currPwd, nwPwd);
                 }
 
                 return rtrnStr;
@@ -312,7 +274,7 @@ namespace HrmsMvc.Controllers
             {
                 return null;
             }
-        }        
+        }
         #endregion
 
         #region Manage Attendance

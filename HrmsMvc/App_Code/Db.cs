@@ -280,14 +280,11 @@ namespace HrmsMvc
                 {
                     con.Open();
                     SqlCommand cmd = null;
-                    SqlCommand cmd2 = null;
 
                     if (!UsrIconUp)
                     {
-                        //cmd = new SqlCommand("SELECT ID FROM UserInfo WHERE ID = @EmpId AND Password = @Pwd", con);
                         cmd = new SqlCommand("SELECT ID,Password FROM UserInfo WHERE ID = @EmpId", con);
-                        cmd.Parameters.AddWithValue("EmpId", em.EmpID);
-                        //cmd.Parameters.AddWithValue("Pwd", em.Password);
+                        cmd.Parameters.AddWithValue("EmpId", em.EmpID);                       
 
                         SqlDataReader sreader = cmd.ExecuteReader();
 
@@ -304,20 +301,19 @@ namespace HrmsMvc
                             if (Helpers.Helper.matchPassword(em.Password, stordPwd))
                             {
                                 cmd = new SqlCommand("UPDATE UserInfo SET Password = @Password,UserType = @Usertype WHERE ID = @EmpID", con);
-                                cmd2 = new SqlCommand("UPDATE EmployeeInfo SET EmpName='" + em.EmpName + "',EmpPhone='" + em.PhoneNumber + "',EmpEmail='" + em.EmailId + "',EmpDob='" + em.DateOfBirth + "' WHERE EmpId='" + em.EmpID + "'", con);
-
                                 cmd.Parameters.AddWithValue("Password", Helpers.Helper.HashPassword(em.Password));
                                 cmd.Parameters.AddWithValue("Usertype", em.Usertype);
                                 cmd.Parameters.AddWithValue("EmpID", em.EmpID);
                                 cmd.ExecuteNonQuery();
 
-                                cmd2.Parameters.AddWithValue("EmpName", em.EmpName);
-                                cmd2.Parameters.AddWithValue("PhoneNumber", em.PhoneNumber);
-                                cmd2.Parameters.AddWithValue("EmailId", em.EmailId);
-                                cmd2.Parameters.AddWithValue("DateOfBirth", em.DateOfBirth);
-                                cmd2.Parameters.AddWithValue("EmpID", em.EmpID);
+                                cmd = new SqlCommand("UPDATE EmployeeInfo SET EmpName='" + em.EmpName + "',EmpPhone='" + em.PhoneNumber + "',EmpEmail='" + em.EmailId + "',EmpDob='" + em.DateOfBirth + "' WHERE EmpId='" + em.EmpID + "'", con);
+                                cmd.Parameters.AddWithValue("EmpName", em.EmpName);
+                                cmd.Parameters.AddWithValue("PhoneNumber", em.PhoneNumber);
+                                cmd.Parameters.AddWithValue("EmailId", em.EmailId);
+                                cmd.Parameters.AddWithValue("DateOfBirth", em.DateOfBirth);
+                                cmd.Parameters.AddWithValue("EmpID", em.EmpID);
 
-                                int rtrnRw = cmd2.ExecuteNonQuery();
+                                int rtrnRw = cmd.ExecuteNonQuery();
                                 if (rtrnRw <= 0)
                                 {
                                     rtrnStr = "ERROR:";
