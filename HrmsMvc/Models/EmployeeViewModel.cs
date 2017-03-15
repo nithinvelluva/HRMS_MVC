@@ -29,7 +29,7 @@ namespace HrmsMvc.Models
         public string CnfrmPassword { get; set; }
 
         [ScriptIgnore]
-        public string UserToken { get; set; }        
+        public string UserToken { get; set; }     
     }
 
     public class EmployeeModel

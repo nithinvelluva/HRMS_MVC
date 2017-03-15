@@ -15,23 +15,30 @@
     <script src="~/Scripts/jquery-3.1.1.js"></script>
     <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
     <script src="~/Scripts/modernizr-2.8.3.js"></script>
-    <script src="~/Scripts/Helpers/Common.js"></script>
+    <script src="~/Scripts/Helpers/Common.js"></script>    
 </head>
 <body>
-    <div class="container body-content">
-        <div className="header">
-            <div className="nav-container">
-                <div className="nav-logo text-center">
-                    <a className="" href="/">
-                        <img src="/assets/app_icon.png" id="logoimg"></img>
+    <div class="body-content">
+        <div class="app-header">
+            <div class="nav-container">
+                <div class="nav-logo text-center">
+                    <a class="" href="/">
+                        <img class="app-icon" />
                     </a>
                 </div>
             </div>
         </div>   
-        @RenderBody()
-        <footer class="text-center">
-            <p style="color:#000000">&copy; @DateTime.Now.Year - Hrms Application</p>
-        </footer>
+        <div class="container">
+            @RenderBody()
+            <footer class="text-center">
+                <p style="color:#000000">&copy; @DateTime.Now.Year - Hrms Application</p>
+            </footer>
+        </div>
     </div>
 </body>
 </html>
+<script>
+    var app_Icon = hostDomain + "/Content/Images/icon-crm.png"
+    $('.app-icon').attr("src", app_Icon);
+    $('.app-url-click').attr("href", hostDomain);
+</script>

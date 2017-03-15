@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 
 <html>
-<head>   
+<head>
     <style>
         .login-card {
             padding: 40px;
@@ -40,8 +40,7 @@
         }
 
         .app-icon {
-            width: 40px;
-            height: 40px;
+            height: 40px;           
         }
 
         .container {
@@ -65,17 +64,17 @@
                     <tr class="row">
                         <td class="colm-1">
                             <div class="cursor-pointer">
-                                <a href="https://myhrmsportal.azurewebsites.net">
+                                <a class="app-url-click" href="https://myhrmsportal.azurewebsites.net">
                                     <img class="app-icon"
-                                         src="https://myhrmsportal.azurewebsites.net/Content/Images/icon-crm.png" title="Hrms">
+                                         title="Hrms" src="https://myhrmsportal.azurewebsites.net/Content/Images/icon-crm.png">
                                 </a>
                             </div>
                         </td>
-                        <td class="colm-1">
+                        @*<td class="colm-1">
                             <div class="cursor-pointer text-center">
                                 <h2>HRMS</h2>
                             </div>
-                        </td>
+                        </td>*@
                     </tr>
                 </table>
             </div>
@@ -106,3 +105,9 @@
     </div>
 </body>
 </html>
+@*<script>
+    const hostDomain = window.location.origin;
+    var app_Icon = hostDomain + "/Content/Images/icon-crm.png";
+    document.getElementsByClassName("app-icon").src = app_Icon;
+    document.getElementsByClassName("app-url-click").href = app_Icon;
+</script>*@

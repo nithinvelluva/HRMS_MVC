@@ -93,7 +93,7 @@ namespace HrmsMvc.Controllers
                 }
 
                 status = false;
-                errStr = "Invalid credentials";             
+                errStr = "Invalid credentials";
             }
             ViewBag.ErrorMsg = errStr;
             return View(lobj);
@@ -164,7 +164,8 @@ namespace HrmsMvc.Controllers
 
                         //create url with above token
                         var link = Url.Action("ResetPassword", "Login", new { un = lobj.UserEmail, rt = token, empId = EmpID }, "https");
-                        lobj.UserToken = link;
+                        lobj.UserToken = link;                     
+
                         //var resetLink = "To change your password, click <a class='hrefLink' href='" + Url.Action("ResetPassword", "Login", new { un = lobj.UserEmail, rt = token, empId = EmpID }, "https") + "'>here</a>";
                         var rendView = RenderRazorViewToString("ResetPwdEmailTemplate", lobj);
                         Helpers.Helper.sentEmail("Hrms - Reset password link", rendView, lobj.UserEmail);
