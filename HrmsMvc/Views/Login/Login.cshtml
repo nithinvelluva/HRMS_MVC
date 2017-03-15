@@ -20,7 +20,7 @@
                 @Html.AntiForgeryToken()
                 <form autocomplete="off">
                     <div class="login-card">
-                        <h2 class="text-center">HRMS</h2><br>
+                        <h2 class="text-center">LOGIN</h2><br>
                         @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", onblur = "onBlurInput()"})
                         @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password",
                             onblur = "onBlurInput()"})
