@@ -162,7 +162,7 @@ namespace HrmsMvc.Controllers
                     Text = u.designation
                 }), "Value", "Text", "");
 
-                return RedirectToAction("AdminDashboard","Admin");
+                return View();
             }
             else
             {
