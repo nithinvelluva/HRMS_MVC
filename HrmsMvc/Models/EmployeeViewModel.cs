@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 using System.Web.Script.Serialization;
 
 namespace HrmsMvc.Models
@@ -11,10 +12,12 @@ namespace HrmsMvc.Models
 
         [Required(ErrorMessage = "Please enter username")]
         [Display(Name = "Username")]
+        [AllowHtml]
         public string UserName { get; set; }
 
         [Required(ErrorMessage = "Please enter password")]
         [Display(Name = "Password")]
+        [AllowHtml]
         public string Password { get; set; }
 
         public int UserType { get; set; }
@@ -22,10 +25,12 @@ namespace HrmsMvc.Models
         [Required(ErrorMessage = "Please enter your email to receive password reset link")]
         [RegularExpression(@"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$", ErrorMessage = "Enter a valid email id")]
         [Display(Name = "Please enter your email")]
+        [AllowHtml]
         public string UserEmail { get; set; }
 
         [ScriptIgnore]
         [Required(ErrorMessage = "Please enter password again to confirm")]
+        [AllowHtml]
         public string CnfrmPassword { get; set; }
 
         [ScriptIgnore]
@@ -35,20 +40,28 @@ namespace HrmsMvc.Models
     public class EmployeeModel
     {
         public int EmpID { get; set; }
+        [AllowHtml]
         public string EmpName { get; set; }
         public string Gender { get; set; }
+        [AllowHtml]
         public string UserName { get; set; }
         [ScriptIgnore]
+        [AllowHtml]
         public string Password { get; set; }
         [ScriptIgnore]
+        [AllowHtml]
         public string CnfrmPassword { get; set; }
+        [AllowHtml]
         public string PhoneNumber { get; set; }
+        [AllowHtml]
         public string EmailId { get; set; }
         public string UserRole { get; set; }
         public int DesigType { get; set; }
         public int Usertype { get; set; }
         public string Designation { get; set; }
+        [AllowHtml]
         public string DateOfBirth { get; set; }
+        [AllowHtml]
         public string UserPhotoPath { get; set; }
 
         public string ErrorString { get; set; }
@@ -62,13 +75,16 @@ namespace HrmsMvc.Models
         public double _casualLeave { get; set; }
         public double _festiveLeave { get; set; }
         public double _sickLeave { get; set; }
+        [AllowHtml]
         public string _fromdate { get; set; }
+        [AllowHtml]
         public string _todate { get; set; }
 
         public string _leavedurationtype { get; set; }
         public int _leaveDurTypeInt { get; set; }
         public string _strLvType { get; set; }
         public int _leaveType { get; set; }
+        [AllowHtml]
         public string _comments { get; set; }
         public bool _status { get; set; }
         public bool _rejected { get; set; }
@@ -93,8 +109,7 @@ namespace HrmsMvc.Models
         public double Holidays { get; set; }
         public double WorkingDays { get; set; }
         public double ActiveDays { get; set; }
-        public double LeaveDays { get; set; }
-        //public double WorkingHours { get; set; }
+        public double LeaveDays { get; set; }        
     }
 
     //public class SentQueryModel

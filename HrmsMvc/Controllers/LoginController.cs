@@ -48,7 +48,7 @@ namespace HrmsMvc.Controllers
 
         // POST: Login
         [AcceptVerbs(HttpVerbs.Post)]
-        [RequireHttps]
+        [RequireHttps]        
         public ActionResult Login(LoginModel lobj)
         {
             ViewBag.ErrorMsg = "";
