@@ -381,7 +381,7 @@ namespace HrmsMvc
                 SqlCommand cmd = new SqlCommand("INSERT INTO PasswordResetToken VALUES(@empId,@token,@created)", con);
                 cmd.Parameters.AddWithValue("empId", empId);
                 cmd.Parameters.AddWithValue("token", token);
-                cmd.Parameters.AddWithValue("created", DateTime.UtcNow.AddHours(1).ToString());
+                cmd.Parameters.AddWithValue("created", DateTime.UtcNow.AddHours(4).ToString());
                 cmd.ExecuteNonQuery();
                 con.Close();
             }
