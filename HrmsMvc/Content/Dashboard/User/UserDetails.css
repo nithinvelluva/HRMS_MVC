@@ -4,7 +4,6 @@
 }
 
 .waitIconDiv {
-    /*display: none;*/
     position: fixed;
     top: 80%;
     left: 45%;
@@ -186,4 +185,27 @@ button, input, optgroup, select, textarea {
 
 #ResultTableDiv {
     overflow: auto;
+}
+
+@media screen and (max-width: 450px) {
+    .waitIconDiv {
+        position: fixed;
+        /*top: 70%;*/
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        width: 50%;
+        height: 50%;
+    }
+
+    .waitIconDivRprt {
+        display: none;
+        position: fixed;
+        /*top: 70%;*/
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        width: 50%;
+        height: 50%;
+    }
 }

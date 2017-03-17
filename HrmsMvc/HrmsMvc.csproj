@@ -333,6 +333,7 @@
     <Content Include="Views\Login\ResetPassword.cshtml" />
     <Content Include="Views\Login\ErrorPage.cshtml" />
     <Content Include="Views\Login\ResetPwdEmailTemplate.cshtml" />
+    <Content Include="Views\Login\SuccessViewPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

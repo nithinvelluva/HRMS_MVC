@@ -17,16 +17,18 @@ namespace HrmsMvc.Controllers
     {
         #region UserDetails
 
-        // GET: UserDetails
-        [RequireHttps]
+        // GET: UserDetails        
         [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult UserDetails()
         {
-            int EmpID = (Session["UserId"] != null) ? Convert.ToInt32(Session["UserId"]) : 0;
-            int UserType = (Session["Usertype"] != null) ? Convert.ToInt32(Session["Usertype"]) : 0;
+            //int EmpID = (Session["UserId"] != null) ? Convert.ToInt32(Session["UserId"]) : 0;
+            //int UserType = (Session["Usertype"] != null) ? Convert.ToInt32(Session["Usertype"]) : 0;
 
-            if (EmpID > 0 && UserType > 0)
+            if (Session["USER"] != null)
             {
+                int EmpID = (Session["USER"] as LoginModel).Id;
+                int UserType = (Session["USER"] as LoginModel).UserType;
+
                 ViewBag.EmpId = EmpID;
                 ViewBag.UserType = UserType;
 
@@ -105,8 +107,7 @@ namespace HrmsMvc.Controllers
                 return RedirectToAction("Login","Login");
             }
         }
-
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public string getEmployeeInfo(string empId)
         {
@@ -138,8 +139,7 @@ namespace HrmsMvc.Controllers
             }
             return null;
         }
-
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public string ProfileDetails(string Id, string firstName, string lastName, string empname, string dob, string gender, string role, string username, string cnfPwd, string email, string phone)
         {
@@ -231,8 +231,7 @@ namespace HrmsMvc.Controllers
             em.ErrorString = errStr;
             return serializer.Serialize(em);
         }
-
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public string ChangeUserPassword(string empId, string currPwd, string nwPwd, string nwPwdCnfm)
         {
@@ -278,15 +277,13 @@ namespace HrmsMvc.Controllers
         #endregion
 
         #region Manage Attendance
-
-        [RequireHttps]
+        
         public ActionResult AttendanceDetails(int EmpId)
         {
             ViewBag.EmpId = EmpId;
             return View();
         }
-
-        [RequireHttps]
+        
         public string GetEmpPunchDetails(string empId, int timeoffset)
         {
             int EmpID = (!string.IsNullOrEmpty(empId)) ? Convert.ToInt32(empId) : 0;
@@ -312,8 +309,7 @@ namespace HrmsMvc.Controllers
             }
             return null;
         }
-
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public string AddAttendance(string EmpId, string punchInTime, string punchOutTime, int type, int timeoffset)
         {
@@ -372,8 +368,7 @@ namespace HrmsMvc.Controllers
             }
             return null;
         }
-
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult SearchPunchDetails(string EmpId, string StartDate, string EndDate, int timeoffset)
         {
@@ -422,8 +417,7 @@ namespace HrmsMvc.Controllers
 
         #region Manage Leaves
 
-        [HttpPost]
-        [RequireHttps]
+        [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult GetLeaveDetails(string EmpId, string UserType, string month, string year)
         {
             try
@@ -467,9 +461,7 @@ namespace HrmsMvc.Controllers
                 return Json(new { draw = 0, recordsFiltered = 0, recordsTotal = 0, data = new List<LeaveModel>() }, JsonRequestBehavior.AllowGet);
             }
         }
-
-        [HttpPost]
-        [RequireHttps]
+       
         [AcceptVerbs(HttpVerbs.Post)]
         public string GetLeaveStatistics(string EmpId)
         {
@@ -505,9 +497,7 @@ namespace HrmsMvc.Controllers
                 return null;
             }
         }
-
-        [HttpPost]
-        [RequireHttps]
+              
         [AcceptVerbs(HttpVerbs.Post)]
         public string AddLeave(string leaveId, string EmpId, string fromDate, string toDate, string leaveType, string leaveDurType, string comments, string LvTypStr, string usertype, string lvDurTypStr, bool isCancel)
         {
@@ -600,8 +590,7 @@ namespace HrmsMvc.Controllers
             }
         }
 
-        [HttpPost]
-        [RequireHttps]
+        [AcceptVerbs(HttpVerbs.Post)]
         public string SentQuery(string SenterMail, string emailSubject, string emailBody)
         {
             try
@@ -639,8 +628,7 @@ namespace HrmsMvc.Controllers
         #endregion
 
         #region UserReports
-
-        [RequireHttps]
+        
         public string GetUserReport(int EmpId, string year, string month)
         {
             try
@@ -713,7 +701,7 @@ namespace HrmsMvc.Controllers
 
         #region Upload userphoto
 
-        [RequireHttps]
+        
         public ActionResult CapturePhoto()
         {
             return View();

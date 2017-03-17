@@ -152,7 +152,7 @@
                                     </ul>
                                 </li>*@
                             <li>
-                                <a href="javascript:void(0)" onclick="initSignOut()">
+                                <a href="~/Login/Logout">
                                     Log out
                                 </a>
                             </li>
@@ -174,22 +174,6 @@
 </body>
 </html>
 <script type="text/javascript">
-
-    function initSignOut() {
-        var initSignout = {};
-        initSignout.url = "/Login/Logout";
-        initSignout.type = "GET";
-        initSignout.datatype = "json";
-        initSignout.contentType = "application/json";
-        initSignout.success = function (status) {
-            var url = "/Login";
-            window.location.href = url;
-        };
-        initSignout.error = function () {
-        };
-        $.ajax(initSignout);
-    }
-
     function navigateTo(page) {
         var activeElement;
         var activeContentDiv;
@@ -215,7 +199,6 @@
         $(".main-nav li").removeClass("active");
         $(activeElement).addClass("active");
     }
-
     $(document).ready(function () {
         demo.initChartist();
         navigateTo(DASHBOARD);

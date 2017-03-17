@@ -11,7 +11,6 @@ namespace HrmsMvc.Controllers
     [RequireHttps]
     public class AdminController : Controller
     {
-        [RequireHttps]
         [AcceptVerbs(HttpVerbs.Post)]
         public string ManageEmployee(string empName, string userName, string Gender, string Role, string Desig, string DateOfBirth, string EmailId, string Phone, string UserPhotoPath)
         {
@@ -99,7 +98,6 @@ namespace HrmsMvc.Controllers
         }
 
         // GET: Attendance
-        [RequireHttps]
         public ActionResult Attendance()
         {
             //DataTable dt = Db.GetEmpPunchDetails();
@@ -124,22 +122,23 @@ namespace HrmsMvc.Controllers
         }
 
         // GET: LeaveInfo
-        [RequireHttps]
         public ActionResult LeaveInfo()
         {
             return View();
         }
 
         // GET: AdminDashboard
-        [RequireHttps]
         [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult AdminDashboard()
         {
-            int EmpID = (Session["UserId"] != null) ? Convert.ToInt32(Session["UserId"]) : 0;
-            int UserType = (Session["Usertype"] != null) ? Convert.ToInt32(Session["Usertype"]) : 0;
+            //int EmpID = (Session["UserId"] != null) ? Convert.ToInt32(Session["UserId"]) : 0;
+            //int UserType = (Session["Usertype"] != null) ? Convert.ToInt32(Session["Usertype"]) : 0;
 
-            if (EmpID > 0 && UserType > 0)
+            if (Session["USER"] != null)
             {
+                int EmpID = (Session["USER"] as LoginModel).Id;
+                int UserType = (Session["USER"] as LoginModel).UserType;
+
                 ViewBag.EmpId = EmpID;
                 ViewBag.UserType = UserType;
 
@@ -170,7 +169,6 @@ namespace HrmsMvc.Controllers
             }
         }
 
-        [RequireHttps]
         [AcceptVerbs(HttpVerbs.Post)]
         public string RemoveEmployee(string EmpId)
         {
@@ -194,7 +192,6 @@ namespace HrmsMvc.Controllers
             return null;
         }
 
-        [RequireHttps]
         [AcceptVerbs(HttpVerbs.Post)]
         public string GetEmployeeData(int BlockNumber = 1)
         {

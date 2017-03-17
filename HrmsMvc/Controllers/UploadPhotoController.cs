@@ -12,13 +12,13 @@ namespace HrmsMvc.Controllers
     public class UploadPhotoController : Controller
     {
         // GET: UploadPhoto
-        [RequireHttps]
+        
         public ActionResult Index()
         {
             return View();
         }
 
-        [RequireHttps]
+        
         [HttpPost]
         public string Upload(HttpPostedFileBase myFile)
         {
@@ -38,7 +38,7 @@ namespace HrmsMvc.Controllers
             }
         }
 
-        [RequireHttps]
+        
         [AcceptVerbs(HttpVerbs.Post)]
         public JsonResult UploadFile()
         {
@@ -89,7 +89,7 @@ namespace HrmsMvc.Controllers
             return Json(Convert.ToString(_imgname), JsonRequestBehavior.AllowGet);
         }
 
-        [RequireHttps]
+        
         public string UpdateUserPhoto(string empid, string userphotopath, string prvUserPhotoPath, bool CancelFlag)
         {
             try

@@ -4,15 +4,13 @@ namespace HrmsMvc.Controllers
 {
     [RequireHttps]
     public class EmailController : Controller
-    {
-        [RequireHttps]
+    {      
         public ActionResult SentQuery()
         {
             return View();
         }
 
-        [AcceptVerbs(HttpVerbs.Post)]
-        [RequireHttps]
+        [AcceptVerbs(HttpVerbs.Post)]        
         public string SentQuery(FormCollection fm)
         {
             return null;

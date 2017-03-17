@@ -8,7 +8,7 @@ namespace HrmsMvc.Controllers
     public class CapturePhotoController : Controller
     {
         // GET: CapturePhoto
-        [RequireHttps]
+        
         public ActionResult Index()
         {
             Session["val"] = "";
@@ -16,7 +16,7 @@ namespace HrmsMvc.Controllers
         }
 
         [HttpPost]
-        [RequireHttps]
+        
         public ActionResult Index(string Imagename)
         {
             string sss = Session["val"].ToString();
@@ -27,7 +27,7 @@ namespace HrmsMvc.Controllers
         }
 
         [HttpGet]
-        [RequireHttps]
+        
         public ActionResult Changephoto()
         {
             if (Convert.ToString(Session["val"]) != string.Empty)
@@ -49,7 +49,7 @@ namespace HrmsMvc.Controllers
         }
 
         [HttpPost]
-        [RequireHttps]
+        
         public void Capture()
         {
             var stream = Request.InputStream;

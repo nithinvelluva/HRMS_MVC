@@ -125,7 +125,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li class="cursor"><a href="javascript:void(0)" id="chngPwdRef" onclick="navigateTo(CHANGEPASSWORD)">Change Password</a></li>
-                                    <li class="cursor"><a href="javascript:void(0)" id="signoutRef" onclick="initSignOut()">Sign Out</a></li>
+                                    <li class="cursor"><a href="~/Login/Logout" id="signoutRef">Sign Out</a></li>
                                 </ul>
                             </li>
                         </ul>
@@ -447,21 +447,7 @@
         else{
             $('#userAvatar').attr('src',userPhoto);
         }
-    }
-    function initSignOut() {
-        var initSignout = {};
-        initSignout.url = "/Login/Logout";
-        initSignout.type = "GET";
-        initSignout.datatype = "json";
-        initSignout.contentType = "application/json";
-        initSignout.success = function (status) {
-            var url = "/Login";
-            window.location.href = url;
-        };
-        initSignout.error = function () {
-        };
-        $.ajax(initSignout);
-    }
+    }    
     function getEmpDetails()
     {
         showLoadreport("#imgProgProf","#EmpProfileForm");

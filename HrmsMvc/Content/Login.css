@@ -6,6 +6,15 @@ body {
     height: 100%;
 }
 
+.field-validation-error
+{
+    color: Red;
+}
+.input-validation-error
+{
+    border-color: Red !important;
+}
+
 .app-icon {
     height: 50px;
 }

@@ -5,8 +5,7 @@ namespace HrmsMvc.Controllers
     [RequireHttps]
     public class HomeController : Controller
     {
-        // GET: Home
-        [RequireHttps]
+        // GET: Home     
         public ActionResult Index()
         {
             return View();

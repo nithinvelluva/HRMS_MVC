@@ -6,11 +6,6 @@
 <html>
 <head>
     <title>HRMS</title>    
-    <style>
-        #ErrorMsg {
-            display: none;
-        }
-    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -22,14 +17,12 @@
                     <div class="login-card">
                         <h2 class="text-center">LOGIN</h2><br>
                         @Html.TextBoxFor(model => model.UserName,"", new { @class = "form-control", placeholder = "USERNAME", onblur = "onBlurInput()"})
-                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password",
-                            onblur = "onBlurInput()"})
-                        @Html.Label("Invalid credentials", new { @id = "ErrorMsg", @class = "text-danger" })
+                        @Html.TextBoxFor(model => model.Password,"", new { @class = "form-control", placeholder = "PASSWORD", type = "password",onblur = "onBlurInput()"})                        
+                        @Html.ValidationMessageFor(model => model.UserName, "", new { @style = "float:left;", @id = "ErrorMsg" })                       
                         <input type="submit" name="login" class="login login-submit btn btn-primary btn-fill" value="Sign In">
                         <br />
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <a href="~/Login/ForgotPassword" class="pull-right hrefLink"
-                               id="btnForgotPwd">Forgot Password ?</a>
+                            <a href="~/Login/ForgotPassword" class="pull-right hrefLink" id="btnForgotPwd">Forgot Password ?</a>
                         </div>
                     </div>
                 </form>
@@ -39,18 +32,9 @@
 </body>
 </html>
 <script type="text/javascript">
-    $(document).ready(function () {        
-        $('#UserName').val('');
-        $('#Password').val('');
-        $('#UserName').focus();
-        var error = @Html.Raw(Json.Encode(ViewBag.ErrorMsg));
-        if(error!=null)
-        {
-            $('#ErrorMsg').show();
-            $('#ErrorMsg').text(error);
-        }
+    $(document).ready(function () {     
+        $('#UserName').focus();      
     });
-
     function onBlurInput(){
         if ($('#UserName').val().toString().length > 0 
             && $('#Password').val().toString().length > 0) {           
