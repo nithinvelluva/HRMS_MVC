@@ -110,6 +110,7 @@ namespace HrmsMvc.Controllers
 
         // POST: ForgotPassword
         [AcceptVerbs(HttpVerbs.Post)]
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult ForgotPassword(LoginModel lobj)
         {
             if (string.IsNullOrEmpty(lobj.UserEmail))
@@ -143,8 +144,8 @@ namespace HrmsMvc.Controllers
                     lobj.UserToken = link;
                     var rendView = RenderRazorViewToString("ResetPwdEmailTemplate", lobj);
                     Helpers.Helper.sentEmail("Hrms - Reset password link", rendView, lobj.UserEmail);
-                 
-                    return RedirectToAction("SuccessViewPartial", "Login", new LoginModel() { returnString = "Please check your email for a link to reset your password" });
+                                       
+                    return RedirectToAction("SuccessViewPartial", "Login",new LoginModel() { returnString= "Please check your email for a link to reset your password" });
                 }
                 else
                 {
@@ -157,6 +158,7 @@ namespace HrmsMvc.Controllers
         }
 
         // GET: ResetPassword
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult ResetPassword(string un, string rt, string empId)
         {
             if (!string.IsNullOrEmpty(un) && !string.IsNullOrEmpty(rt) && !string.IsNullOrEmpty(empId))
@@ -177,6 +179,7 @@ namespace HrmsMvc.Controllers
 
         // POST: ResetPassword
         [AcceptVerbs(HttpVerbs.Post)]
+        [OutputCache(NoStore = true, Duration = 0)]
         public ActionResult ResetPassword(LoginModel lobj)
         {
             if (Session["RESETLINKPARAM"] != null)
@@ -204,7 +207,7 @@ namespace HrmsMvc.Controllers
                     {
                         Db.updateResetPasswordToken(EmpID.ToString(), token);
                         Session.RemoveAll();
-                        
+
                         return RedirectToAction("SuccessViewPartial", "Login", new LoginModel() { returnString = "Your password has been changed successfully" });
                     }
                 }
